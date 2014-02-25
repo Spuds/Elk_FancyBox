@@ -45,7 +45,7 @@ function ilt_fb4elk()
 		addInlineJavascript('$(document).ready(function() {$("img").off("click.elk_bbc");});');
 
 		// Load up FB
-		loadCSSFile('fancybox/jquery.fancybox-thumbs.css',array('stale' => '?v=2.1.5'));
+		loadCSSFile('fancybox/jquery.fancybox-thumbs.css', array('stale' => '?v=2.1.5'));
 		loadJavascriptFile('fancybox/helpers/jquery.fancybox-thumbs.js', array('stale' => '?v=2.1.5'));
 	}
 
@@ -135,6 +135,8 @@ function ilt_fb4elk()
  * - Subs hook, integrate_bbc_codes hook, Called from Subs.php
  * - Used when attaching Fancybox to bbc images
  * - replaces the standard bbc image link with one contatining fancybox class
+ *
+ * @param mixed[] $codes array of codes as defined for parse_bbc
  */
 function ibc_fb4elk(&$codes)
 {
@@ -215,7 +217,7 @@ function iaa_fb4elk(&$admin_areas)
  * - Admin Hook, integrate_modify_modifications, called from AddonSettings.controller.php
  * - used to add subactions to the addon area
  *
- * @param mixed[] $admin_areas
+ * @param mixed[] $sub_actions
  */
 function imm_fb4elk(&$sub_actions)
 {
