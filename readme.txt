@@ -7,7 +7,7 @@ This modification is released under a MPL V1.1 license, a copy of it with its pr
 [color=blue][b][size=12pt][u]Introduction[/u][/size][/b][/color]
 This modification adds the fancybox lightbox effect to images and attachments in your post.
 [hr]
-fancybox JS is licensed under a Creative Commons Attribution-Non Commercial 3.0 License. You are free to use fancyBox for your personal or non-profit website projects. You must get the author's permission to use fancyBox for commercial websites by paying a fee.  [urlhttp://fancyapps.com/fancybox/#license]fancybox[/url]
+fancybox JS is licensed under a Creative Commons Attribution-Non Commercial 3.0 License. You are free to use fancyBox for your personal or non-profit website projects. You must get the author's permission to use fancyBox for commercial websites by paying a fee.  [url=http://fancyapps.com/fancybox/#license]fancybox[/url]
 
 [color=blue][b][size=12pt][u]Features[/u][/size][/b][/color]
 o Expands a thumbnail (attachment or in-line image) in to a full-size image in a picture frame when clicked
