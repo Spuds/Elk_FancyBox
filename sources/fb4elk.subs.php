@@ -3,7 +3,7 @@
 /**
  * @package "FancyBox 4 ElkArte" Addon for Elkarte
  * @author Spuds
- * @copyright (c) 2011-2014 Spuds
+ * @copyright (c) 2011-2013 Spuds
  * @license This Source Code is subject to the terms of the Mozilla Public License
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
@@ -29,8 +29,8 @@ function ilt_fb4elk()
 	if (empty($modSettings['fancybox_enabled']))
 		return;
 
-	// If we are in an area where we never want this, return
-	if (in_array($context['current_action'], array('admin', 'printpage', 'stats')) || isset($_REQUEST['xml']) || isset($_REQUEST['api']))
+	// If we are in an areay where we never want this, return
+	if (in_array($context['current_action'], array('admin', 'helpadmin', 'printpage')))
 		return;
 
 	// Load in the must have items
@@ -146,11 +146,11 @@ function ibc_fb4elk(&$codes)
 
 	// Make sure the admin had not disabled img tags as well
 	if (!empty($modSettings['disabledBBC']))
+	{
 		foreach (explode(',', $modSettings['disabledBBC']) as $tag)
-			$disabled[$tag] = true;
-
-	if (isset($disabled['img']))
-		return;
+			if ($tag === 'img')
+				return;
+	}
 
 	// Find the img tags and update how they render their HTML
 	foreach ($codes as &$code)
