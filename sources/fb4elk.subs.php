@@ -29,7 +29,7 @@ function ilt_fb4elk()
 	if (empty($modSettings['fancybox_enabled']))
 		return;
 
-	// If we are in an areay where we never want this, return
+	// If we are in an area where we never want this, return
 	if (in_array($context['current_action'], array('admin', 'helpadmin', 'printpage')))
 		return;
 
@@ -134,7 +134,7 @@ function ilt_fb4elk()
  *
  * - Subs hook, integrate_bbc_codes hook, Called from Subs.php
  * - Used when attaching Fancybox to bbc images
- * - replaces the standard bbc image link with one contatining fancybox class
+ * - replaces the standard bbc image link with one containing the fancybox class
  *
  * @param mixed[] $codes array of codes as defined for parse_bbc
  */
@@ -255,7 +255,7 @@ function fb4elk_settings()
 				fbThumb_dd = $(\'#fancybox_panel_position\'),
 				fbThumb_dt = $(\'#setting_fancybox_panel_position\');
 
-			// Show the thumbnail poisition box only if the option has been selected
+			// Show the thumbnail position box only if the option has been selected
 			if (fbThumb === false)
 			{
 				// dd and the dt
