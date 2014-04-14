@@ -16,9 +16,9 @@ if (!defined('ELK'))
 	die('No access...');
 
 /**
- *  ilt_fb4elk()
+ * ilt_fb4elk()
  *
- * - integrate_load_theme, Called from load.php
+ * - Integrate_load_theme, Called from load.php
  * - Used to add items to the loaded theme (css / js)
  */
 function ilt_fb4elk()
@@ -134,7 +134,7 @@ function ilt_fb4elk()
  *
  * - Subs hook, integrate_bbc_codes hook, Called from Subs.php
  * - Used when attaching Fancybox to bbc images
- * - replaces the standard bbc image link with one containing the fancybox class
+ * - Replaces the standard bbc image link with one containing the fancybox class
  *
  * @param mixed[] $codes array of codes as defined for parse_bbc
  */
@@ -154,7 +154,7 @@ function ibc_fb4elk(&$codes)
 				return;
 	}
 
-	// Find the img tags and update how they render their HTML
+	// Find the img bbc tags and update how they render their HTML
 	foreach ($codes as &$code)
 	{
 		if ($code['tag'] === 'img')
@@ -175,8 +175,8 @@ function ibc_fb4elk(&$codes)
 /**
  * iaa_fb4elk()
  *
- * - display Hook, integrate_prepare_display_context, called from Display.controller
- * - used to interact with the message array before its sent to the template
+ * - Display Hook, integrate_prepare_display_context, called from Display.controller
+ * - Used to interact with the message array before its sent to the template
  *
  * @param mixed[] $output
  * @param mixed[] $message
@@ -199,7 +199,7 @@ function ipdc_fb4elk(&$output, &$message)
  * iaa_fb4elk()
  *
  * - Admin Hook, integrate_admin_areas, called from Admin.php
- * - used to add/modify admin menu areas
+ * - Used to add/modify admin menu areas
  *
  * @param mixed[] $admin_areas
  */
@@ -214,8 +214,8 @@ function iaa_fb4elk(&$admin_areas)
 /**
  * imm_fb4elk()
  *
- * - Admin Hook, integrate_modify_modifications, called from AddonSettings.controller.php
- * - used to add subactions to the addon area
+ * - Admin Hook, integrate_sa_modify_modifications, called from AddonSettings.controller.php
+ * - Used to add subactions to the addon area
  *
  * @param mixed[] $sub_actions
  */

@@ -24,7 +24,7 @@
 		<hook hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
 		<hook hook="integrate_bbc_codes" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
 		<hook hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
-		<hook hook="integrate_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
+		<hook hook="integrate_sa_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
 		<hook hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
 		<redirect url="?action=admin;area=addonsettings;sa=fancybox" timeout="5000" />
 	</install>
@@ -32,7 +32,7 @@
 		<hook reverse="true" hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
 		<hook reverse="true" hook="integrate_bbc_codes" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
 		<hook reverse="true" hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
-		<hook reverse="true" hook="integrate_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
+		<hook reverse="true" hook="integrate_sa_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
 		<hook reverse="true" hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
 		<remove-file name="LANGUAGEDIR/english/fb4elk.english.php" />
 		<remove-file name="SUBSDIR/fb4elk.subs.php" />
