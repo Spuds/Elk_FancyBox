@@ -19,8 +19,8 @@
 		<readme parsebbc="true">readme.txt</readme>
 		<require-file name="languages/fb4elk.english.php" destination="LANGUAGEDIR/english">The language strings</require-file>
 		<require-file name="sources/fb4elk.subs.php" destination="SUBSDIR">Main processing files for FB4ELK</require-file>
-		<require-dir name="scripts" destination="$themedir">The Fancybox JS to create the lightbox</require-dir>>
-		<require-dir name="css" destination="$themedir">The Fancybox CSS</require-dir>>
+		<require-dir name="scripts" destination="THEMEDIR">The Fancybox JS to create the lightbox</require-dir>>
+		<require-dir name="css" destination="THEMEDIR">The Fancybox CSS</require-dir>>
 		<hook hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
 		<hook hook="integrate_bbc_codes" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
 		<hook hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
@@ -36,8 +36,8 @@
 		<hook reverse="true" hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
 		<remove-file name="LANGUAGEDIR/english/fb4elk.english.php" />
 		<remove-file name="SUBSDIR/fb4elk.subs.php" />
-		<remove-dir name="$themedir/scripts/fancybox" />
-		<remove-dir name="$themedir/css/fancybox" />
+		<remove-dir name="THEMEDIR/scripts/fancybox" />
+		<remove-dir name="THEMEDIR/css/fancybox" />
 		<redirect url="?action=admin;area=packages;sa=browse" timeout="5000" />
 	</uninstall>
 </package-info>
