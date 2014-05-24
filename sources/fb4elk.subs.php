@@ -36,7 +36,7 @@ function ilt_fb4elk()
 	// Load in the must have items
 	loadLanguage('fb4elk');
 	loadCSSFile(array('fancybox/jquery.fancybox.css', 'fancybox/jquery.fancybox-buttons.css'), array('stale' => '?v=2.1.5'));
-	loadJavascriptFile(array('fancybox/jquery.fancybox.pack.js', 'fancybox/helpers/jquery.fancybox-buttons.js'), array('stale' => '?v=2.1.5'));
+	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js', 'fancybox/helpers/jquery.fancybox-buttons.js'), array('stale' => '?v=2.1.5'));
 
 	// Gallery thumbnails as well?
 	if (!empty($modSettings['fancybox_thumbnails']))
@@ -53,7 +53,16 @@ function ilt_fb4elk()
 	$javascript = '
 		$(document).ready(function() {
 			// All the attachment links get a fancybox class, remove onclick events
-			$("a[id^=link_]").addClass("fancybox").removeAttr("onclick").attr("rel", "gallery");
+			$("a[id^=link_]").each(function(){
+				var tag = $(this);
+
+				tag.addClass("fancybox").removeAttr("onclick");
+
+				// no rel tag yet? then add one
+				if (!tag.attr("rel"))
+					tag.attr("rel", "gallery")
+			});
+
 
 			// Find all the attachment / bbc divs on the page
 			$("div[id$=_footer]").each(function() {
