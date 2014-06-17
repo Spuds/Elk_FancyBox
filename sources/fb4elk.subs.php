@@ -251,7 +251,7 @@ function fb4elk_settings()
 	$context[$context['admin_menu_name']]['tab_data']['tabs']['fancybox']['description'] = $txt['fancybox_desc'];
 
 	// Lets build a settings form
-	require_once(SUBSDIR . '/Settings.class.php');
+	require_once(SUBSDIR . '/SettingsForm.class.php');
 
 	// Instantiate the form
 	$fbSettings = new Settings_Form();
