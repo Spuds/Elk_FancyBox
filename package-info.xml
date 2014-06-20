@@ -15,7 +15,7 @@
  * @version 1.0
  */
 ]]></license>
-	<install for="1.0 Beta - 1.0.99">
+	<install for="1.0 RC1 - 1.0.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<require-file name="languages/fb4elk.english.php" destination="LANGUAGEDIR/english">The language strings</require-file>
 		<require-file name="sources/fb4elk.subs.php" destination="SUBSDIR">Main processing files for FB4ELK</require-file>
@@ -28,7 +28,7 @@
 		<hook hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
 		<redirect url="?action=admin;area=addonsettings;sa=fancybox" timeout="5000" />
 	</install>
-	<uninstall for="1.0 Beta - 1.0.99">
+	<uninstall for="1.0 RC1 - 1.0.99">
 		<hook reverse="true" hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
 		<hook reverse="true" hook="integrate_bbc_codes" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
 		<hook reverse="true" hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
