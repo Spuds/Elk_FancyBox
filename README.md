@@ -5,7 +5,7 @@
 * fancybox JS is licensed under a Creative Commons Attribution-Non Commercial 3.0 License. You are free to use fancyBox for your personal or non-profit website projects. You must get the author's permission to use fancyBox for commercial websites by paying a fee. [fancybox license](http://fancyapps.com/fancybox/#license)
 
 **Introduction**
-This ElkArte addon allows for a lightbox / zoom effect to thumb nailed images and attachments in your post.
+This ElkArte addon adds an image lightbox / zoom effect to thumbnail images and attachments.
 
 Features
  - Expands a thumbnail (attachment or in-line image) in to a full-size image in a picture frame when clicked
