@@ -169,6 +169,8 @@ function build_javascript()
  */
 function build_lookup()
 {
+	global $boardurl;
+
 	$javascript = '
 	$(\'a[href*="postim"]\').each(function (i, item) {
 		var $item = $(item),
@@ -176,9 +178,10 @@ function build_lookup()
 			regex = new RegExp("<img src=\'(.*?\\.(png|gif|jp(e)?g|bmp))\'", "gi");
 		$.ajax({
 			type: "GET",
-			dataType: "html",
 			crossOrigin: true,
 			url: href,
+			proxy: "' . $boardurl . '/fb4elk_proxy.php", // Use a local proxy due to limits on the use of Google Apps Script
+			dataType: "json",
 			cache: true,
 			headers: {"User-Agent": "' . $_SERVER['HTTP_USER_AGENT'] . '"}
 		}).done(function (response) {
@@ -190,7 +193,8 @@ function build_lookup()
 					$item.attr("href", match[1]);
 				}
 			}
-		}).fail(function (xhr, status) {
+		}).fail(function (xhr, status, error) {
+			// console.log(xhr, status, error);
 			// Nothing much to do
 		});
 	})';
@@ -254,7 +258,7 @@ function ipdc_fb4elk(&$output, &$message)
 {
 	global $modSettings;
 
-	$regex = '~<a href="(.*)".*(class="bbc_link").*>(<a href="(.*)".*(class="fancybox" rel="topic")>)<img.*class="bbc_img" />(</a>(</a>))~';
+	$regex = '~<a href="(.*)".*(class="bbc_link").*>(<a href="(.*)".*(class="fancybox" rel="topic")>)<img.*class="bbc_img" />(</a>(</a>))~U';
 
 	// Make sure we need to do anything
 	if (empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
@@ -295,7 +299,7 @@ function fix_url_bbc($matches)
 	{
 		// Remove the inside link and trailing </a>
 		$output = str_replace($matches[3], '', $output);
-		$output = str_replace($matches[6], $matches[6], $output);
+		$output = str_replace($matches[6], $matches[7], $output);
 	}
 	// Fix the links so they link to what they did (ie the url)
 	else
@@ -418,7 +422,6 @@ function fb4elk_settings()
 				fbThumb_dd.parent().slideDown();
 				fbThumb_dt.parent().slideDown();
 			}
-
 		}
 		showhidefbOptions();', true);
 
@@ -531,7 +534,7 @@ class getRemoteLink
 	 */
 	private function _active_providers()
 	{
-		$this->providers = array('imageshack', 'photobucket', 'radikal', 'fotosik', 'postim', 'flickr', 'smugmug');
+		$this->providers = array('imageshack', 'photobucket', 'radikal', 'fotosik', 'postim', 'flic', 'smugmug');
 	}
 
 	/**
@@ -555,6 +558,7 @@ class getRemoteLink
 	public function process_URL($url)
 	{
 		$this->url = $url;
+		$this->out = false;
 
 		// Sites we support
 		$this->_active_providers();
