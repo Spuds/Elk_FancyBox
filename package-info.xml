@@ -20,6 +20,7 @@
 		<license type="inline">This ElkArte addon is released under a MPL V1.1 license, a copy of it with its provisions is included with the package.</license>
 		<require-file name="languages/fb4elk.english.php" destination="LANGUAGEDIR/english">The language strings</require-file>
 		<require-file name="sources/fb4elk.subs.php" destination="SUBSDIR">Main processing files for FB4ELK</require-file>
+		<require-file name="sources/fb4elk_proxy.php" destination="BOARDDIR">Proxy control for FB4ELK</require-file>
 		<require-dir name="scripts" destination="THEMEDIR">The Fancybox JS to create the lightbox</require-dir>>
 		<require-dir name="css" destination="THEMEDIR">The Fancybox CSS</require-dir>>
 		<hook hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
@@ -38,6 +39,7 @@
 		<hook reverse="true" hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
 		<remove-file name="LANGUAGEDIR/english/fb4elk.english.php" />
 		<remove-file name="SUBSDIR/fb4elk.subs.php" />
+		<remove-file name="BOARDDIR/fb4elk_proxy.php" />
 		<remove-dir name="THEMEDIR/scripts/fancybox" />
 		<remove-dir name="THEMEDIR/css/fancybox" />
 		<redirect url="?action=admin;area=packages;sa=browse" timeout="5000" />
