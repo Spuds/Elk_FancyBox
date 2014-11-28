@@ -93,7 +93,7 @@ function build_javascript()
 			// Attach FB to everything we tagged with the fancybox class
 			$(".fancybox").fancybox({
 				type: "image",
-				padding: ' . $modSettings['fancybox_Padding'] . ',
+				padding: "' . empty($modSettings['fancybox_Padding']) ? 0 : $modSettings['fancybox_Padding'] . '",
 				arrows: true,
 				closeBtn: true,
 				loop: "' .  !empty($modSettings['fancybox_Loop']) . '",
@@ -482,6 +482,8 @@ function fb4elk_settings()
 			$_POST['fancybox_navSpeed'] = 300;
 		if (empty($_POST['fancybox_playSpeed']))
 			$_POST['fancybox_playSpeed'] = 3000;
+		if (empty($_POST['fancybox_Padding']))
+			$_POST['fancybox_Padding'] = 0;
 
 		Settings_Form::save_db($config_vars);
 		redirectexit('action=admin;area=addonsettings;sa=fancybox');
