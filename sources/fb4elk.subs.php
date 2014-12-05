@@ -93,7 +93,7 @@ function build_javascript()
 			// Attach FB to everything we tagged with the fancybox class
 			$(".fancybox").fancybox({
 				type: "image",
-				padding: "' . empty($modSettings['fancybox_Padding']) ? 0 : $modSettings['fancybox_Padding'] . '",
+				padding: ' . (empty($modSettings['fancybox_Padding']) ? 0 : (int) $modSettings['fancybox_Padding']) . ',
 				arrows: true,
 				closeBtn: true,
 				loop: "' .  !empty($modSettings['fancybox_Loop']) . '",
