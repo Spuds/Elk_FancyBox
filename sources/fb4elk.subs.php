@@ -54,7 +54,7 @@ function ilt_fb4elk()
 	build_javascript();
 
 	// Build a lookup for postimage
-	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']))
+	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']) && !in_array($context['current_action'], array('profile')))
 	{
 		// CORS lib
 		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.5'));
@@ -163,7 +163,7 @@ function build_javascript()
 }
 
 /**
- * The only way I see to reliabley get the full size image link
+ * The only way I see to reliably get the full size image link
  * from postimage is to request it.  This makes the ajax request
  * to find all postim links on a page and update them.
  */
@@ -246,7 +246,7 @@ function ibc_fb4elk(&$codes)
 }
 
 /**
- * iaa_fb4elk()
+ * ipdc_fb4elk()
  *
  * - Display Hook, integrate_prepare_display_context, called from Display.controller
  * - Used to interact with the message array before its sent to the template
