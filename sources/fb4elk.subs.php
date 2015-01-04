@@ -258,7 +258,7 @@ function ipdc_fb4elk(&$output, &$message)
 {
 	global $modSettings;
 
-	$regex = '~<a href="(.*)".*(class="bbc_link").*>(<a href="(.*)".*(class="fancybox" rel="topic")>)<img.*class="bbc_img" />(</a>(</a>))~U';
+	$regex = '~<a href="(.*+)".*?(class="bbc_link").*?>(<a href="(.*+)".*?(class="fancybox" rel="topic")>)<img.*?class="bbc_img" />(</a>(</a>))~';
 
 	// Make sure we need to do anything
 	if (empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
