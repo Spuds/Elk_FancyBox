@@ -50,11 +50,11 @@ function ilt_fb4elk()
 		loadJavascriptFile('fancybox/helpers/jquery.fancybox-thumbs.js', array('stale' => '?v=2.1.5'));
 	}
 
-	// And output the neeeded JS commands
+	// And output the needed JS commands
 	build_javascript();
 
 	// Build a lookup for postimage
-	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']) && !in_array($context['current_action'], array('profile')))
+	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']) && empty($context['current_action']))
 	{
 		// CORS lib
 		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.5'));
@@ -510,7 +510,7 @@ class getRemoteLink
 	protected $out = false;
 
 	/**
-	 * Determins if a link is from a host provider we support
+	 * Determines if a link is from a host provider we support
 	 *
 	 * @return boolean
 	 */
@@ -639,7 +639,7 @@ class getRemoteLink
 
 	/**
 	 * postimage
-	 * This service requries an external lookup to find the full size image
+	 * This service requires an external lookup to find the full size image
 	 * Currently done with JS lookups after page load, but this is here
 	 * should you want to do this server side.
 	 */
