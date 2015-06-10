@@ -8,7 +8,7 @@
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0
+ * @version 1.0.1
  *
  */
 
@@ -50,11 +50,11 @@ function ilt_fb4elk()
 		loadJavascriptFile('fancybox/helpers/jquery.fancybox-thumbs.js', array('stale' => '?v=2.1.5'));
 	}
 
-	// And output the needed JS commands
+	// And output the neeeded JS commands
 	build_javascript();
 
 	// Build a lookup for postimage
-	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']) && empty($context['current_action']))
+	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']))
 	{
 		// CORS lib
 		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.5'));
@@ -174,8 +174,7 @@ function build_lookup()
 	$javascript = '
 	$(\'a[href*="postim"]\').each(function (i, item) {
 		var $item = $(item),
-			href = $item.attr("href"),
-			regex = new RegExp("<img src=\'(.*?\\.(png|gif|jp(e)?g|bmp))\'", "gi");
+			href = $item.attr("href");
 		$.ajax({
 			type: "GET",
 			crossOrigin: true,
@@ -187,14 +186,17 @@ function build_lookup()
 		}).done(function (response) {
 			// There is an img in the response
 			if (response.indexOf(\'<img\') !== -1) {
-				match = regex.exec(response);
-				if (match !== null) {
-					// Swap out the old link with the correct one
-					$item.attr("href", match[1]);
-				}
+				var image2 = $(response).find("#code_2").html(),
+					image1 = $(response).find("img:first").attr("src");
+
+				// Swap out the old link with the correct one, link code takes precedence
+				if (image1 === image2 || image2)
+					$item.attr("href", image2);
+				else if (image1)
+					$item.attr("href", image1);
 			}
 		}).fail(function (xhr, status, error) {
-			// console.log(xhr, status, error);
+			console.log(xhr, status, error);
 			// Nothing much to do
 		});
 	})';
@@ -246,7 +248,7 @@ function ibc_fb4elk(&$codes)
 }
 
 /**
- * ipdc_fb4elk()
+ * iaa_fb4elk()
  *
  * - Display Hook, integrate_prepare_display_context, called from Display.controller
  * - Used to interact with the message array before its sent to the template
@@ -258,7 +260,7 @@ function ipdc_fb4elk(&$output, &$message)
 {
 	global $modSettings;
 
-	$regex = '~<a href="(.*+)".*?(class="bbc_link").*?>(<a href="(.*+)".*?(class="fancybox" rel="topic")>)<img.*?class="bbc_img" />(</a>(</a>))~';
+	$regex = '~<a href="([^"]*)".*(class="bbc_link").*>(<a href="([^"]*)".*(class="fancybox" rel="topic")>)<img.*class="bbc_img" />(</a>(</a>))~Ui';
 
 	// Make sure we need to do anything
 	if (empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
@@ -266,7 +268,9 @@ function ipdc_fb4elk(&$output, &$message)
 
 	// Fix nested links caused by [url=remote][img]http://remote[/img][/url]
 	// These occur as part of parse_bbc so deal with it
-	$output['body'] = preg_replace_callback($regex, 'fix_url_bbc', $output['body']);
+	$check = preg_replace_callback($regex, 'fix_url_bbc', $output['body']);
+	if ($check !== null)
+		$output['body'] = $check;
 
 	// Find all the bbc images with a rel="topic" in the links and inject the gallery tag so
 	// the bbc images and attachments of a message are part of the same gallery
@@ -277,7 +281,7 @@ function ipdc_fb4elk(&$output, &$message)
  * Updates links to external sites to link to full image or reverts the nested link to
  * be what it was since we add a link via the updated img BBC tag.
  *
- * @param mixed[] $matches from the regex with the following capture groups
+ * @param string[] $matches from the regex with the following capture groups
  *	[0] full match
  *	[1] outside link href
  *	[2] outside link class=""

@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
 	<id>Spuds:fb4elk</id>
 	<name>Fancy Box 4 ElkArte</name>
-	<version>1.0</version>
+	<version>1.0.1</version>
 	<type>addon</type>
 	<license><![CDATA[
 /**
@@ -12,7 +12,7 @@
  * @author spuds
  * @license MPL 1.1 http://mozilla.org/MPL/1.1/
  *
- * @version 1.0
+ * @version 1.0.1
  */
 ]]></license>
 	<install for="1.0 - 1.0.99">
@@ -28,6 +28,7 @@
 		<hook hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
 		<hook hook="integrate_sa_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
 		<hook hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
+		<credits url="www.elkarte.net" license="MPL 1.1" copyright="spuds">Fancybox 4 Elkarte</credits>
 		<redirect url="?action=admin;area=addonsettings;sa=fancybox" timeout="5000" />
 	</install>
 
