@@ -54,7 +54,7 @@ function ilt_fb4elk()
 	build_javascript();
 
 	// Build a lookup for postimage
-	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']))
+	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']) && $context['current_action'] !== 'profile')
 	{
 		// CORS lib
 		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.5'));
