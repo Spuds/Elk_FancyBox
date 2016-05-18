@@ -36,6 +36,7 @@ $txt['fancybox_bbc_img'] = 'Apply fancybox to images added with the [img] bbc ta
 $txt['fancybox_disable_img_in_url'] = 'Don\'t attach fancybox to linked BBC images';
 $txt['fancybox_convert_photo_share'] = 'Convert photo share links to display the full sized image';
 $txt['fancybox_convert_photo_share_help'] = 'Limited support for imageshack, photobucket, radikal, fotosik, postimage, flic.kr, smugmug';
+$txt['fancybox_convert_postimage_share'] = 'Enable postimage photo share support';
 
 $txt['fancybox_displayOptions'] = 'Display Options';
 $txt['fancybox_Padding'] = 'Size of border to place around the image, 0 for none';

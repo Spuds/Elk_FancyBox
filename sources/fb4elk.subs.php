@@ -50,11 +50,11 @@ function ilt_fb4elk()
 		loadJavascriptFile('fancybox/helpers/jquery.fancybox-thumbs.js', array('stale' => '?v=2.1.5'));
 	}
 
-	// And output the neeeded JS commands
+	// And output the needed JS commands
 	build_javascript();
 
 	// Build a lookup for postimage
-	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_bbc_img']) && $context['current_action'] !== 'profile')
+	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_convert_postimage_share']) && !empty($modSettings['fancybox_bbc_img']) && !in_array($context['current_action'], array('profile', 'moderate', 'login')))
 	{
 		// CORS lib
 		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.5'));
@@ -344,7 +344,7 @@ function iaa_fb4elk(&$admin_areas)
 {
 	global $txt;
 
-	loadlanguage('fb4elk');
+	loadLanguage('fb4elk');
 	$admin_areas['config']['areas']['addonsettings']['subsections']['fancybox'] = array($txt['fancybox_title']);
 }
 
@@ -375,7 +375,7 @@ function fb4elk_settings()
 {
 	global $txt, $context, $scripturl, $modSettings;
 
-	loadlanguage('fb4elk');
+	loadLanguage('fb4elk');
 	$context[$context['admin_menu_name']]['tab_data']['tabs']['fancybox']['description'] = $txt['fancybox_desc'];
 
 	// Lets build a settings form
@@ -395,6 +395,10 @@ function fb4elk_settings()
 			var fbConvert = document.getElementById(\'fancybox_disable_img_in_url\'),
 				fbShare = document.getElementById(\'fancybox_convert_photo_share\'),
 				fbBBC = document.getElementById(\'fancybox_bbc_img\');
+				
+			var postimage_hide = !document.getElementById(\'fancybox_convert_photo_share\').checked,
+			 	postimage_dd = $(\'#fancybox_convert_postimage_share\'),
+				postimage_dt = $(\'#setting_fancybox_convert_postimage_share\');	
 
 			// Show the BBC url box only if bbc image option is enabled
 			if (fbBBC.checked === false)
@@ -426,7 +430,19 @@ function fb4elk_settings()
 				fbThumb_dd.parent().slideDown();
 				fbThumb_dt.parent().slideDown();
 			}
+			
+			if (postimage_hide)
+			{
+				postimage_dd.parent().slideUp();
+				postimage_dt.parent().slideUp();
+			}	
+			else
+			{
+				postimage_dd.parent().slideDown();
+				postimage_dt.parent().slideDown();
+			}
 		}
+		
 		showhidefbOptions();', true);
 
 	// All the options, well at least some of them!
@@ -466,7 +482,8 @@ function fb4elk_settings()
 			array('int', 'fancybox_playSpeed'),
 			array('check', 'fancybox_bbc_img', 'onchange' => 'showhidefbOptions();'),
 			array('check', 'fancybox_disable_img_in_url', 'onchange' => 'showhidefbOptions();'),
-			array('check', 'fancybox_convert_photo_share'),
+			array('check', 'fancybox_convert_photo_share', 'onchange' => 'showhidefbOptions();'),
+			array('check', 'fancybox_convert_postimage_share'),
 	);
 
 	// Load the settings to the form class
