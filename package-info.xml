@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
 	<id>Spuds:fb4elk</id>
 	<name>Fancy Box 4 ElkArte</name>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<type>addon</type>
 	<license><![CDATA[
 /**
@@ -12,17 +12,18 @@
  * @author spuds
  * @license MPL 1.1 http://mozilla.org/MPL/1.1/
  *
- * @version 1.0.1
+ * @version 1.0.2
  */
 ]]></license>
 	<install for="1.0 - 1.0.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<license type="inline">This ElkArte addon is released under a MPL V1.1 license, a copy of it with its provisions is included with the package.</license>
 		<require-file name="languages/fb4elk.english.php" destination="LANGUAGEDIR/english">The language strings</require-file>
+		<require-file name="languages/fb4elk.french.php" destination="LANGUAGEDIR/french" />
 		<require-file name="sources/fb4elk.subs.php" destination="SUBSDIR">Main processing files for FB4ELK</require-file>
 		<require-file name="sources/fb4elk_proxy.php" destination="BOARDDIR">Proxy control for FB4ELK</require-file>
 		<require-dir name="scripts" destination="THEMEDIR">The Fancybox JS to create the lightbox</require-dir>>
-		<require-dir name="css" destination="THEMEDIR">The Fancybox CSS</require-dir>>
+		<require-dir name="css" destination="THEMEDIR">The Fancybox CSS</require-dir>
 		<hook hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
 		<hook hook="integrate_bbc_codes" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
 		<hook hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
@@ -39,6 +40,7 @@
 		<hook reverse="true" hook="integrate_sa_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
 		<hook reverse="true" hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
 		<remove-file name="LANGUAGEDIR/english/fb4elk.english.php" />
+		<remove-file name="LANGUAGEDIR/french/fb4elk.french.php" />
 		<remove-file name="SUBSDIR/fb4elk.subs.php" />
 		<remove-file name="BOARDDIR/fb4elk_proxy.php" />
 		<remove-dir name="THEMEDIR/scripts/fancybox" />
