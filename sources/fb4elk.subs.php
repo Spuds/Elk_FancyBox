@@ -3,12 +3,12 @@
 /**
  * @package "FancyBox 4 ElkArte" Addon for Elkarte
  * @author Spuds
- * @copyright (c) 2011-2014 Spuds
+ * @copyright (c) 2011-2017 Spuds
  * @license This Source Code is subject to the terms of the Mozilla Public License
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  */
 
@@ -35,8 +35,8 @@ function ilt_fb4elk()
 
 	// Load in the must have items
 	loadLanguage('fb4elk');
-	loadCSSFile(array('fancybox/jquery.fancybox.css', 'fancybox/jquery.fancybox-buttons.css'), array('stale' => '?v=2.1.5'));
-	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js', 'fancybox/helpers/jquery.fancybox-buttons.js'), array('stale' => '?v=2.1.5'));
+	loadCSSFile(array('fancybox/jquery.fancybox.css', 'fancybox/jquery.fancybox-buttons.css'), array('stale' => '?v=2.1.6'));
+	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js', 'fancybox/helpers/jquery.fancybox-buttons.js'), array('stale' => '?v=2.1.6'));
 
 	// BBC image links enabled, then remove the elk bbc image clicker
 	if (!empty($modSettings['fancybox_bbc_img']))
@@ -46,8 +46,8 @@ function ilt_fb4elk()
 	if (!empty($modSettings['fancybox_thumbnails']))
 	{
 		// Load up FB helpers
-		loadCSSFile('fancybox/jquery.fancybox-thumbs.css', array('stale' => '?v=2.1.5'));
-		loadJavascriptFile('fancybox/helpers/jquery.fancybox-thumbs.js', array('stale' => '?v=2.1.5'));
+		loadCSSFile('fancybox/jquery.fancybox-thumbs.css', array('stale' => '?v=2.1.6'));
+		loadJavascriptFile('fancybox/helpers/jquery.fancybox-thumbs.js', array('stale' => '?v=2.1.6'));
 	}
 
 	// And output the needed JS commands
@@ -57,7 +57,7 @@ function ilt_fb4elk()
 	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_convert_postimage_share']) && !empty($modSettings['fancybox_bbc_img']) && !in_array($context['current_action'], array('profile', 'moderate', 'login')))
 	{
 		// CORS lib
-		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.5'));
+		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.6'));
 		build_lookup();
 	}
 }
@@ -72,11 +72,11 @@ function build_javascript()
 	// Build the Javascript based on ACP choices
 	$javascript = '
 		$(document).ready(function() {
-			// All the attachment links get a fancybox class, remove onclick events
+			// All the attachment links gets a fancybox data, remove onclick events
 			$("a[id^=link_]").each(function(){
 				var tag = $(this);
 
-				tag.addClass("fancybox").removeAttr("onclick");
+				tag.attr("data-fancybox", "").removeAttr("onclick");
 
 				// No rel tag yet? then add one
 				if (!tag.attr("rel"))
@@ -90,8 +90,8 @@ function build_javascript()
 				$("#" + id + " a[rel=gallery]").attr("rel", "gallery_" + id);
 			});
 
-			// Attach FB to everything we tagged with the fancybox class
-			$(".fancybox").fancybox({
+			// Attach FB to everything we tagged with the fancybox data attr
+			$("[data-fancybox]").fancybox({
 				type: "image",
 				padding: ' . (empty($modSettings['fancybox_Padding']) ? 0 : (int) $modSettings['fancybox_Padding']) . ',
 				arrows: true,
@@ -450,40 +450,40 @@ function fb4elk_settings()
 		array('check', 'fancybox_enabled', 'postinput' => $txt['fancybox_enabled_desc']),
 		// Transition effects and speed
 		array('title', 'fancybox_animation'),
-			array('select', 'fancybox_openEffect', array(
-				'elastic' => $txt['fancybox_effect_elastic'],
-				'fade' => $txt['fancybox_effect_fade'],
-				'none' => $txt['fancybox_effect_none'])
-			),
-			array('int', 'fancybox_openSpeed'),
-			array('select', 'fancybox_closeEffect', array(
-				'elastic' => $txt['fancybox_effect_elastic'],
-				'fade' => $txt['fancybox_effect_fade'],
-				'none' => $txt['fancybox_effect_none'])
-			),
-			array('int', 'fancybox_closeSpeed'),
-			array('select', 'fancybox_navEffect', array(
-				'elastic' => $txt['fancybox_effect_elastic'],
-				'fade' => $txt['fancybox_effect_fade'],
-				'none' => $txt['fancybox_effect_none'])
-			),
-			array('int', 'fancybox_navSpeed'),
+		array('select', 'fancybox_openEffect', array(
+			'elastic' => $txt['fancybox_effect_elastic'],
+			'fade' => $txt['fancybox_effect_fade'],
+			'none' => $txt['fancybox_effect_none'])
+		),
+		array('int', 'fancybox_openSpeed'),
+		array('select', 'fancybox_closeEffect', array(
+			'elastic' => $txt['fancybox_effect_elastic'],
+			'fade' => $txt['fancybox_effect_fade'],
+			'none' => $txt['fancybox_effect_none'])
+		),
+		array('int', 'fancybox_closeSpeed'),
+		array('select', 'fancybox_navEffect', array(
+			'elastic' => $txt['fancybox_effect_elastic'],
+			'fade' => $txt['fancybox_effect_fade'],
+			'none' => $txt['fancybox_effect_none'])
+		),
+		array('int', 'fancybox_navSpeed'),
 		array('title', 'fancybox_displayOptions'),
-			array('int', 'fancybox_Padding'),
-			array('check', 'fancybox_Loop'),
-			array('check', 'fancybox_thumbnails', 'onchange' => 'showhidefbOptions();'),
-			array('select', 'fancybox_panel_position', array(
-				'top' => $txt['fancybox_panel_top'],
-				'bottom' => $txt['fancybox_panel_bottom'],
-				'simple' => $txt['fancybox_panel_simple'])
-			),
+		array('int', 'fancybox_Padding'),
+		array('check', 'fancybox_Loop'),
+		array('check', 'fancybox_thumbnails', 'onchange' => 'showhidefbOptions();'),
+		array('select', 'fancybox_panel_position', array(
+			'top' => $txt['fancybox_panel_top'],
+			'bottom' => $txt['fancybox_panel_bottom'],
+			'simple' => $txt['fancybox_panel_simple'])
+		),
 		array('title', 'fancybox_other'),
-			array('check', 'fancybox_autoPlay'),
-			array('int', 'fancybox_playSpeed'),
-			array('check', 'fancybox_bbc_img', 'onchange' => 'showhidefbOptions();'),
-			array('check', 'fancybox_disable_img_in_url', 'onchange' => 'showhidefbOptions();'),
-			array('check', 'fancybox_convert_photo_share', 'onchange' => 'showhidefbOptions();'),
-			array('check', 'fancybox_convert_postimage_share'),
+		array('check', 'fancybox_autoPlay'),
+		array('int', 'fancybox_playSpeed'),
+		array('check', 'fancybox_bbc_img', 'onchange' => 'showhidefbOptions();'),
+		array('check', 'fancybox_disable_img_in_url', 'onchange' => 'showhidefbOptions();'),
+		array('check', 'fancybox_convert_photo_share', 'onchange' => 'showhidefbOptions();'),
+		array('check', 'fancybox_convert_postimage_share'),
 	);
 
 	// Load the settings to the form class
