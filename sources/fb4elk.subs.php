@@ -8,7 +8,7 @@
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.2
+ * @version 1.0.3
  *
  */
 
@@ -274,7 +274,7 @@ function ipdc_fb4elk(&$output, &$message)
 
 	// Find all the bbc images with a rel="topic" in the links and inject the gallery tag so
 	// the bbc images and attachments of a message are part of the same gallery
-	$output['body'] = str_replace('rel="topic"', 'rel="gallery_msg_' . $output['id'] . '_footer"', $output['body']);
+	$output['body'] = str_replace('rel="topic"', 'data-fancybox="1" rel="gallery_msg_' . $output['id'] . '_footer"', $output['body']);
 }
 
 /**
@@ -290,6 +290,8 @@ function ipdc_fb4elk(&$output, &$message)
  *	[5] inside link class="fancybox" rel="topic"
  *	[6] trailing </a></a>
  *	[7] trailing </a>
+ *
+ * @return string
  */
 function fix_url_bbc($matches)
 {
@@ -577,6 +579,7 @@ class getRemoteLink
 	 * Main controlling function to update links
 	 *
 	 * @param string[] $url
+	 * @return bool|string
 	 */
 	public function process_URL($url)
 	{
@@ -625,10 +628,16 @@ class getRemoteLink
 
 	/**
 	 * photobucket ... The link is to the album so just swap it, not sure there is a thumb one
+	 * [URL=http://s220.photobucket.com/user/IDMLLC/media/IMG_9289.jpg.html]
+	 * [IMG]http://i220.photobucket.com/albums/dd131/IDMLLC/th_IMG_9289.jpg[/img][/URL]
+	 * need to strip the th_ if included
 	 */
 	private function _photobucket()
 	{
-		$this->out = $this->url[4];
+		$link_parts = pathinfo($this->url[4]);
+
+		$destination = preg_replace('~^th_~', '', $link_parts['basename']);
+		$this->out = str_replace($link_parts['basename'], $destination, $this->url[4]);
 	}
 
 	/**
