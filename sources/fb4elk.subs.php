@@ -678,7 +678,7 @@ class getRemoteLink
 			// We have the last two, so lets build us a link
 			if ($count > 2)
 			{
-				$this->out = 'http://' . str_replace('imagizer.', '', $link_parts['host']) . '/download/' . $link[$count - 2] . '/' . $link[$count - 1];
+				$this->out = $link_parts['scheme'] . '://' . str_replace('imagizer.', '', $link_parts['host']) . '/download/' . $link[$count - 2] . '/' . $link[$count - 1];
 			}
 		}
 	}
