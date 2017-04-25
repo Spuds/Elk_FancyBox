@@ -1,4 +1,4 @@
-[center][size=16pt][b]Fancybox 4 ElkArte Version 1.0.3[/b][/size][/center]
+[center][size=16pt][b]Fancybox 4 ElkArte Version 1.0.4[/b][/size][/center]
 [hr]
 
 [color=blue][b][size=12pt][u]License[/u][/size][/b][/color]
@@ -14,3 +14,5 @@ o Expands a thumbnail (attachment or in-line image) in to a full-size image in a
 o Auto size images to fit browser window, with option to expand to full size
 o Slideshow for images on page, grouping by individual messages in the topic
 o Prev / Next navigation with arrow keys
+o Use [nobbc][img alt=nofb]...[/img][/nobbc] to have fancybox skip specific images
+

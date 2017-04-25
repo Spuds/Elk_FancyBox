@@ -1,4 +1,4 @@
-### Fancybox 4 ElkArte Version 1.0.3
+### Fancybox 4 ElkArte Version 1.0.4
 
 **License**
 * This Source Code is subject to the terms of the Mozilla Public License version 1.1 (the "License"). You can obtain a copy of the License at [http://mozilla.org/MPL/1.1/.](http://mozilla.org/MPL/1.1/)
@@ -12,3 +12,4 @@ Features
  - Auto size images to fit browser window, with option to expand to full size
  - Slideshow for images on page, grouping by individual messages in the topic
  - Prev / Next navigation with arrow keys
+ - Use [img alt=nofb]...[/img] to have fancybox skip specific images

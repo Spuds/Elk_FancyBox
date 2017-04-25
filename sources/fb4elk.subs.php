@@ -13,7 +13,9 @@
  */
 
 if (!defined('ELK'))
+{
 	die('No access...');
+}
 
 /**
  * ilt_fb4elk()
@@ -27,11 +29,15 @@ function ilt_fb4elk()
 
 	// If its off, just return
 	if (empty($modSettings['fancybox_enabled']))
+	{
 		return;
+	}
 
 	// If we are in an area where we never want this, return
 	if (in_array($context['current_action'], array('admin', 'helpadmin', 'printpage')))
+	{
 		return;
+	}
 
 	// Load in the must have items
 	loadLanguage('fb4elk');
@@ -40,7 +46,9 @@ function ilt_fb4elk()
 
 	// BBC image links enabled, then remove the elk bbc image clicker
 	if (!empty($modSettings['fancybox_bbc_img']))
+	{
 		addInlineJavascript('$(document).ready(function() {$("img").off("click.elk_bbc");});');
+	}
 
 	// Gallery thumbnails as well?
 	if (!empty($modSettings['fancybox_thumbnails']))
@@ -96,7 +104,7 @@ function build_javascript()
 				padding: ' . (empty($modSettings['fancybox_Padding']) ? 0 : (int) $modSettings['fancybox_Padding']) . ',
 				arrows: true,
 				closeBtn: true,
-				loop: "' .  !empty($modSettings['fancybox_Loop']) . '",
+				loop: "' . !empty($modSettings['fancybox_Loop']) . '",
 				openEffect: "' . $modSettings['fancybox_openEffect'] . '",
 				openSpeed: ' . (int) $modSettings['fancybox_openSpeed'] . ',
 				closeEffect: "' . $modSettings['fancybox_closeEffect'] . '",
@@ -139,6 +147,7 @@ function build_javascript()
 					},';
 
 	if (!empty($modSettings['fancybox_thumbnails']))
+	{
 		$javascript .= '
 					thumbs: {
 						width: 40,
@@ -149,6 +158,7 @@ function build_javascript()
 						showEarly: true,
 						closeClick : true,
 					},';
+	}
 
 	$javascript .= '
 					ajax: {
@@ -219,14 +229,20 @@ function ibc_fb4elk(&$codes)
 
 	// Only attach for topics, when bbc is on and the option is checked
 	if (empty($_REQUEST['topic']) || empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
+	{
 		return;
+	}
 
 	// Make sure the admin had not disabled img tags as well
 	if (!empty($modSettings['disabledBBC']))
 	{
 		foreach (explode(',', $modSettings['disabledBBC']) as $tag)
+		{
 			if ($tag === 'img')
+			{
 				return;
+			}
+		}
 	}
 
 	// Find the img bbc tags and update how they render their HTML
@@ -235,14 +251,22 @@ function ibc_fb4elk(&$codes)
 		if ($code['tag'] === 'img')
 		{
 			if ($user_info['is_guest'])
+			{
 				$style = '';
+			}
 			else
-				$style = 'width:{width};height:{height}';
+			{
+				$style = '{width}{height}';
+			}
 
 			if ($code['content'] == '<img src="$1" alt="" class="bbc_img" />')
+			{
 				$code['content'] = '<a href="$1" class="fancybox" rel="topic"><img src="$1" alt="" class="bbc_img" /></a>';
+			}
 			elseif ($code['content'] == '<img src="$1" alt="{alt}" style="{width}{height}" class="bbc_img resized" />')
-				$code['content'] = '<a href="$1" class="fancybox" title="{alt}" rel="topic"><img src="$1" alt="{alt}" style="' . $style . '" class="bbc_img resized fancybox" /></a>';
+			{
+				$code['content'] = '<a href="$1" class="fancybox" rel="topic" title="{alt}"><img src="$1" alt="{alt}" style="' . $style . '" class="bbc_img resized" /></a>';
+			}
 		}
 	}
 }
@@ -260,17 +284,21 @@ function ipdc_fb4elk(&$output, &$message)
 {
 	global $modSettings;
 
-	$regex = '~<a href="([^"]*)".*(class="bbc_link").*>(<a href="([^"]*)".*(class="fancybox" rel="topic")>)<img.*class="bbc_img" />(</a>(</a>))~Ui';
+	$regex = '~<a href="([^"]*)".*(class="bbc_link").*>(<a href="([^"]*)".*(class="fancybox" rel="topic"(?: title=".*")?)>)<img.*class="bbc_img(?: resized)?" />(</a>(</a>))~Ui';
 
 	// Make sure we need to do anything
 	if (empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
+	{
 		return;
+	}
 
 	// Fix nested links caused by [url=remote][img]http://remote[/img][/url]
 	// These occur as part of parse_bbc so deal with it
 	$check = preg_replace_callback($regex, 'fix_url_bbc', $output['body']);
 	if ($check !== null)
+	{
 		$output['body'] = $check;
+	}
 
 	// Find all the bbc images with a rel="topic" in the links and inject the gallery tag so
 	// the bbc images and attachments of a message are part of the same gallery
@@ -282,14 +310,14 @@ function ipdc_fb4elk(&$output, &$message)
  * be what it was since we add a link via the updated img BBC tag.
  *
  * @param string[] $matches from the regex with the following capture groups
- *	[0] full match
- *	[1] outside link href
- *	[2] outside link class=""
- *	[3] inside link full
- *	[4] inside link href
- *	[5] inside link class="fancybox" rel="topic"
- *	[6] trailing </a></a>
- *	[7] trailing </a>
+ *    [0] full match
+ *    [1] outside link href
+ *    [2] outside link class=""
+ *    [3] inside link full
+ *    [4] inside link href
+ *    [5] inside link class="fancybox" rel="topic"
+ *    [6] trailing </a></a>
+ *    [7] trailing </a>
  *
  * @return string
  */
@@ -299,9 +327,10 @@ function fix_url_bbc($matches)
 	static $linker;
 
 	$output = $matches[0];
+	$no_fb = strpos($matches[5], 'title="nofb"') !== false || strpos($matches[5], 'title="&quot;nofb&quot;"') !== false;
 
 	// Don't want fancybox at all on linked bbc image [url=remote][img]http://remote[/img][/url] syntax
-	if (!empty($modSettings['fancybox_disable_img_in_url']))
+	if (!empty($modSettings['fancybox_disable_img_in_url']) || $no_fb)
 	{
 		// Remove the inside link and trailing </a>
 		$output = str_replace($matches[3], '', $output);
@@ -323,11 +352,15 @@ function fix_url_bbc($matches)
 		if (!empty($modSettings['fancybox_convert_photo_share']))
 		{
 			if (empty($linker))
+			{
 				$linker = new getRemoteLink();
+			}
 
 			$newlink = $linker->process_URL($matches);
 			if ($newlink)
+			{
 				$output = str_replace($matches[1], $newlink, $output);
+			}
 		}
 	}
 
@@ -360,12 +393,16 @@ function iaa_fb4elk(&$admin_areas)
  */
 function imm_fb4elk(&$sub_actions)
 {
+	global $context, $txt;
+
 	$sub_actions['fancybox'] = array(
 		'dir' => SUBSDIR,
 		'file' => 'fb4elk.subs.php',
 		'function' => 'fb4elk_settings',
 		'permission' => 'admin_forum',
 	);
+
+	$context[$context['admin_menu_name']]['tab_data']['tabs']['fancybox']['description'] = $txt['fancybox_desc'];
 }
 
 /**
@@ -378,7 +415,6 @@ function fb4elk_settings()
 	global $txt, $context, $scripturl, $modSettings;
 
 	loadLanguage('fb4elk');
-	$context[$context['admin_menu_name']]['tab_data']['tabs']['fancybox']['description'] = $txt['fancybox_desc'];
 
 	// Lets build a settings form
 	require_once(SUBSDIR . '/SettingsForm.class.php');
@@ -498,15 +534,25 @@ function fb4elk_settings()
 
 		// Some defaults are good to have
 		if (empty($_POST['fancybox_openSpeed']))
+		{
 			$_POST['fancybox_openSpeed'] = 300;
+		}
 		if (empty($_POST['fancybox_closeSpeed']))
+		{
 			$_POST['fancybox_closeSpeed'] = 300;
+		}
 		if (empty($_POST['fancybox_navSpeed']))
+		{
 			$_POST['fancybox_navSpeed'] = 300;
+		}
 		if (empty($_POST['fancybox_playSpeed']))
+		{
 			$_POST['fancybox_playSpeed'] = 3000;
+		}
 		if (empty($_POST['fancybox_Padding']))
+		{
 			$_POST['fancybox_Padding'] = 0;
+		}
 
 		Settings_Form::save_db($config_vars);
 		redirectexit('action=admin;area=addonsettings;sa=fancybox');
@@ -518,7 +564,9 @@ function fb4elk_settings()
 	$context['post_url'] = $scripturl . '?action=admin;area=addonsettings;sa=fancybox;save';
 
 	if (!empty($modSettings['fancybox_thumbnails']))
+	{
 		updateSettings(array('fancybox_panel_position' => 'top'));
+	}
 
 	Settings_Form::prepare_db($config_vars);
 }
@@ -531,49 +579,8 @@ class getRemoteLink
 	protected $provider = array();
 	protected $providers = array();
 	protected $out = false;
-
-	/**
-	 * Determines if a link is from a host provider we support
-	 *
-	 * @return boolean
-	 */
-	private function _valid()
-	{
-		foreach ($this->providers as $host)
-		{
-			$host = trim($host);
-			if (stripos($this->provider, $host) !== false)
-			{
-				$this->provider = $host;
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Loads the active image host providers
-	 *
-	 * @global string[] $modSettings
-	 */
-	private function _active_providers()
-	{
-		$this->providers = array('imageshack', 'photobucket', 'radikal', 'fotosik', 'postim', 'flic', 'smugmug');
-	}
-
-	/**
-	 * Parses a URL in to a its parts so we have the host provider
-	 */
-	private function _parseURL()
-	{
-		$this->url_parts = parse_url($this->url[1]);
-
-		if ($this->url_parts !== false)
-			$this->provider = $this->url_parts['host'];
-		else
-			$this->provider = false;
-	}
+	protected $url = '';
+	protected $url_parts = array();
 
 	/**
 	 * Main controlling function to update links
@@ -604,6 +611,54 @@ class getRemoteLink
 	}
 
 	/**
+	 * Loads the active image host providers
+	 *
+	 * @global string[] $modSettings
+	 */
+	private function _active_providers()
+	{
+		$this->providers = array('imageshack', 'photobucket', 'radikal', 'fotosik', 'postim', 'flic', 'smugmug');
+	}
+
+	/**
+	 * Parses a URL in to a its parts so we have the host provider
+	 */
+	private function _parseURL()
+	{
+		$this->url_parts = parse_url($this->url[1]);
+
+		if ($this->url_parts !== false)
+		{
+			$this->provider = $this->url_parts['host'];
+		}
+		else
+		{
+			$this->provider = false;
+		}
+	}
+
+	/**
+	 * Determines if a link is from a host provider we support
+	 *
+	 * @return boolean
+	 */
+	private function _valid()
+	{
+		foreach ($this->providers as $host)
+		{
+			$host = trim($host);
+			if (stripos($this->provider, $host) !== false)
+			{
+				$this->provider = $host;
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Imageshack changed how they works and I'm not sure this is the way to go for all links
 	 * but the old .th thing looks to be gone.
 	 *
@@ -622,7 +677,9 @@ class getRemoteLink
 
 			// We have the last two, so lets build us a link
 			if ($count > 2)
-				$this->out = 'http://' . str_replace('imagizer.', '', $link_parts['host']) . '/download/' . $link[$count-2] . '/' . $link[$count-1];
+			{
+				$this->out = 'http://' . str_replace('imagizer.', '', $link_parts['host']) . '/download/' . $link[$count - 2] . '/' . $link[$count - 1];
+			}
 		}
 	}
 
@@ -646,7 +703,9 @@ class getRemoteLink
 	private function _radikal()
 	{
 		if (preg_match('~(.*?)/([^/]*?)t\.(png|gif|jp(e)?g|bmp)$~isu', $this->url[4], $out))
+		{
 			$this->out = $out[1] . '/' . $out[2] . '.' . $out[3];
+		}
 	}
 
 	/**
@@ -660,9 +719,13 @@ class getRemoteLink
 		if (preg_match('~(.*?)\.(?:m\.|)(png|gif|jp(e)?g|bmp)$~isu', $this->url[4], $out))
 		{
 			if (substr($out[1], -1) == 'm')
+			{
 				$out[1] = substr($out[1], 0, strlen($out[1]) - 1);
+			}
 			if (substr($out[1], -3) == 'med')
+			{
 				$out[1] = substr($out[1], 0, strlen($out[1]) - 3);
+			}
 			$this->out = $out[1] . '.' . $out[2];
 		}
 	}
@@ -692,7 +755,9 @@ class getRemoteLink
 	private function _flic()
 	{
 		if (preg_match('~(.*?)(?:_[t|s|q]\.)(png|gif|jp(e)?g|bmp)$~isu', $this->url[4], $out))
+		{
 			$this->out = $out[1] . '_b.' . $out[2];
+		}
 	}
 
 	/**
@@ -701,6 +766,8 @@ class getRemoteLink
 	private function _smugmug()
 	{
 		if (preg_match('~(.*?)(?:\/S\/)(.*?)(?:-S)\.(png|gif|jp(e)?g|bmp)$~isu', $this->url[4], $out))
+		{
 			$this->out = $out[1] . '/O/' . $out[2] . '.' . $out[3];
+		}
 	}
 }
