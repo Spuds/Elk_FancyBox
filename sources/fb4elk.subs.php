@@ -8,7 +8,7 @@
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.3
+ * @version 1.0.5
  *
  */
 
@@ -43,6 +43,12 @@ function ilt_fb4elk()
 	loadLanguage('fb4elk');
 	loadCSSFile(array('fancybox/jquery.fancybox.css', 'fancybox/jquery.fancybox-buttons.css'), array('stale' => '?v=2.1.6'));
 	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js', 'fancybox/helpers/jquery.fancybox-buttons.js'), array('stale' => '?v=2.1.6'));
+
+	// Disable the built in lightbox support in ElkArte 1.1
+	if (substr(FORUM_VERSION, 8, 3) === '1.1')
+	{
+		addInlineJavascript('$(document).ready(function() {$("[data-lightboximage]").off("click.elk_lb");});');
+	}
 
 	// BBC image links enabled, then remove the elk bbc image clicker
 	if (!empty($modSettings['fancybox_bbc_img']))
@@ -80,7 +86,7 @@ function build_javascript()
 	// Build the Javascript based on ACP choices
 	$javascript = '
 		$(document).ready(function() {
-			// All the attachment links gets a fancybox data, remove onclick events
+			// All the attachment links get fancybox data, remove onclick events
 			$("a[id^=link_]").each(function(){
 				var tag = $(this);
 
@@ -127,7 +133,7 @@ function build_javascript()
 						\'<div id="fancybox-buttons"> \' +
 							\'<ul> \' +
 							\'	<li> \' +
-							\'		<a class="btnPrev" title="' . $txt['fancy_button_prev'] . '" href="javascript:;"></a \' +
+							\'		<a class="btnPrev" title="' . $txt['fancy_button_prev'] . '" href="javascript:;"></a> \' +
 							\'	</li> \' +
 							\'	<li> \' +
 							\'		<a class="btnPlay" title="' . $txt['fancy_slideshow_start'] . '" href="javascript:;"></a> \' +
@@ -576,7 +582,7 @@ function fb4elk_settings()
  */
 class getRemoteLink
 {
-	protected $provider = array();
+	protected $provider = '';
 	protected $providers = array();
 	protected $out = false;
 	protected $url = '';
