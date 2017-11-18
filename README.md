@@ -1,4 +1,4 @@
-### Fancybox 4 ElkArte Version 1.0.5
+### Fancybox 4 ElkArte Version 1.0.6
 
 **License**
 * This Source Code is subject to the terms of the Mozilla Public License version 1.1 (the "License"). You can obtain a copy of the License at [http://mozilla.org/MPL/1.1/.](http://mozilla.org/MPL/1.1/)

@@ -8,7 +8,7 @@
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.5
+ * @version 1.0.6
  *
  */
 
@@ -93,8 +93,12 @@ function build_javascript()
 				tag.attr("data-fancybox", "").removeAttr("onclick");
 
 				// No rel tag yet? then add one
-				if (!tag.attr("rel"))
-					tag.attr("rel", "gallery")
+				if (!tag.attr("rel")) {
+					if (tag.data("lightboxmessage"))
+						tag.attr("rel", "gallery_" + tag.data("lightboxmessage"));
+					else
+						tag.attr("rel", "gallery");
+				}
 			});
 
 			// Find all the attachment / bbc divs on the page

@@ -17,7 +17,7 @@ $url = (isset($_GET['url'])) ? $_GET['url'] : exit;
 $referer = (isset($_SERVER['HTTP_REFERER'])) ? strtolower($_SERVER['HTTP_REFERER']) : false;
 $is_allowed = $referer && strpos($referer, strtolower($_SERVER['SERVER_NAME'])) !== false;
 
-// You have to be albe to use this proxy
+// You have to be able to use this proxy
 $string = ($is_allowed) ? utf8_encode(file_get_contents($url)) : exit;
 
 $json = json_encode($string);
