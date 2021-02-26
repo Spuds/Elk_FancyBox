@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
 	<id>Spuds:fb4elk</id>
 	<name>Fancy Box 4 ElkArte</name>
-	<version>1.0.6</version>
+	<version>1.0.7</version>
 	<type>addon</type>
 	<license><![CDATA[
 /**
@@ -12,7 +12,7 @@
  * @author spuds
  * @license MPL 1.1 http://mozilla.org/MPL/1.1/
  *
- * @version 1.0.6
+ * @version 1.0.7
  */
 ]]></license>
 	<install for="1.0 - 1.1.99">

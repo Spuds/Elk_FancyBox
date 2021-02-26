@@ -8,7 +8,7 @@
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.6
+ * @version 1.0.7
  *
  */
 
@@ -260,14 +260,7 @@ function ibc_fb4elk(&$codes)
 	{
 		if ($code['tag'] === 'img')
 		{
-			if ($user_info['is_guest'])
-			{
-				$style = '';
-			}
-			else
-			{
-				$style = '{width}{height}';
-			}
+			$style = '{width}{height}';
 
 			if ($code['content'] == '<img src="$1" alt="" class="bbc_img" />')
 			{

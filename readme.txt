@@ -1,4 +1,4 @@
-[center][size=16pt][b]Fancybox 4 ElkArte Version 1.0.6[/b][/size][/center]
+[center][size=16pt][b]Fancybox 4 ElkArte Version 1.0.7[/b][/size][/center]
 [hr]
 
 [color=blue][b][size=12pt][u]License[/u][/size][/b][/color]
