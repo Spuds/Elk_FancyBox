@@ -9,24 +9,23 @@ $txt['fancybox_desc'] = 'This addon adds a lightbox effect to attachment and bbc
 
 // Effects for events
 $txt['fancybox_animation'] = 'Animation Effects';
-$txt['fancybox_effect_elastic'] = 'Elastic';
+$txt['fancybox_effect_elastic'] = 'Zoom-in-out';
 $txt['fancybox_effect_fade'] = 'Fade';
 $txt['fancybox_effect_none'] = 'None';
+$txt['fancybox_effect_zoom'] = 'Zoom';
+$txt['fancybox_effect_slide'] = 'Slide';
+$txt['fancybox_effect_circular'] = 'Circular';
+$txt['fancybox_effect_tube'] = 'Tube';
+$txt['fancybox_effect_rotate'] = 'Rotate';
 
 // Events we know, open/close/navigate
-$txt['fancybox_openEffect'] = 'Animation when opening image';
-$txt['fancybox_closeEffect'] = 'Animation when closing image';
+$txt['fancybox_openEffect'] = 'Animation when opening/closing image';
 $txt['fancybox_navEffect'] = 'Animation when moving to next image';
-$txt['fancybox_openSpeed'] = 'Animation speed when opening';
-$txt['fancybox_closeSpeed'] = 'Animation speed when closing';
+$txt['fancybox_openSpeed'] = 'Animation speed when opening/closing';
 $txt['fancybox_navSpeed'] = 'Animation speed when moving to next image';
 
 // Positioning options
-$txt['fancybox_panel_position'] = 'Position navigation buttons';
-$txt['fancybox_panel_top'] = 'Top';
-$txt['fancybox_panel_bottom'] = 'Bottom';
-$txt['fancybox_panel_simple'] = 'Inside';
-$txt['fancybox_thumbnails'] = 'Display thumbnails below slides';
+$txt['fancybox_thumbnails'] = 'Display thumbnails';
 
 // Other
 $txt['fancybox_other'] = 'Other Options';
@@ -39,7 +38,6 @@ $txt['fancybox_convert_photo_share_help'] = 'Limited support for imageshack, pho
 $txt['fancybox_convert_postimage_share'] = 'Enable postimage photo share support';
 
 $txt['fancybox_displayOptions'] = 'Display Options';
-$txt['fancybox_Padding'] = 'Size of border to place around the image, 0 for none';
 $txt['fancybox_Loop'] = 'Enables cyclic navigation, so when you reach the last element, first element will be displayed';
 
 // Template strings for the gallery buttons
@@ -49,3 +47,7 @@ $txt['fancy_button_prev'] = 'Previous';
 $txt['fancy_slideshow_start'] = 'Start slideshow';
 $txt['fancy_slideshow_pause'] = 'Pause slideshow';
 $txt['fancy_toggle_size'] = 'Toggle size';
+$txt['fancy_full_screen'] = 'Full screen';
+$txt['fancy_thumbnails'] = 'Thumbnails';
+$txt['fancy_download'] = 'Download';
+$txt['fancy_share'] = 'Share';

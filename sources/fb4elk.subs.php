@@ -41,8 +41,8 @@ function ilt_fb4elk()
 
 	// Load in the must have items
 	loadLanguage('fb4elk');
-	loadCSSFile(array('fancybox/jquery.fancybox.css', 'fancybox/jquery.fancybox-buttons.css'), array('stale' => '?v=2.1.6'));
-	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js', 'fancybox/helpers/jquery.fancybox-buttons.js'), array('stale' => '?v=2.1.6'));
+	loadCSSFile(array('fancybox/jquery.fancybox.css'), array('stale' => '?v=3.5.7'));
+	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js'), array('stale' => '?v=3.5.7'));
 
 	// Disable the built in lightbox support in ElkArte 1.1
 	if (defined('FORUM_VERSION') && substr(FORUM_VERSION, 8, 3) === '1.1')
@@ -56,14 +56,6 @@ function ilt_fb4elk()
 		addInlineJavascript('$(document).ready(function() {$("img").off("click.elk_bbc");});');
 	}
 
-	// Gallery thumbnails as well?
-	if (!empty($modSettings['fancybox_thumbnails']))
-	{
-		// Load up FB helpers
-		loadCSSFile('fancybox/jquery.fancybox-thumbs.css', array('stale' => '?v=2.1.6'));
-		loadJavascriptFile('fancybox/helpers/jquery.fancybox-thumbs.js', array('stale' => '?v=2.1.6'));
-	}
-
 	// And output the needed JS commands
 	build_javascript();
 
@@ -71,7 +63,7 @@ function ilt_fb4elk()
 	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_convert_postimage_share']) && !empty($modSettings['fancybox_bbc_img']) && !in_array($context['current_action'], array('profile', 'moderate', 'login')))
 	{
 		// CORS lib
-		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=2.1.6'));
+		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=1.3'));
 		build_lookup();
 	}
 }
@@ -95,7 +87,10 @@ function build_javascript()
 				// No rel tag yet? then add one
 				if (!tag.attr("rel")) {
 					if (tag.data("lightboxmessage"))
+					{
 						tag.attr("rel", "gallery_" + tag.data("lightboxmessage"));
+						tag.attr("data-fancybox", "gallery_" + tag.data("lightboxmessage"));
+					}
 					else
 						tag.attr("rel", "gallery");
 				}
@@ -111,71 +106,46 @@ function build_javascript()
 			// Attach FB to everything we tagged with the fancybox data attr
 			$("[data-fancybox]").fancybox({
 				type: "image",
-				padding: ' . (empty($modSettings['fancybox_Padding']) ? 0 : (int) $modSettings['fancybox_Padding']) . ',
-				arrows: true,
-				closeBtn: true,
 				loop: "' . !empty($modSettings['fancybox_Loop']) . '",
-				openEffect: "' . $modSettings['fancybox_openEffect'] . '",
-				openSpeed: ' . (int) $modSettings['fancybox_openSpeed'] . ',
-				closeEffect: "' . $modSettings['fancybox_closeEffect'] . '",
-				closeSpeed: ' . (int) $modSettings['fancybox_closeSpeed'] . ',
-				nextEffect: "' . $modSettings['fancybox_navEffect'] . '",
-				nextSpeed: ' . (int) $modSettings['fancybox_navSpeed'] . ',
-				prevEffect: "' . $modSettings['fancybox_navEffect'] . '",
-				prevSpeed: ' . (int) $modSettings['fancybox_navSpeed'] . ',
-				autoPlay: ' . (!empty($modSettings['fancybox_autoPlay']) ? 'true' : 'false') . ',
-				playSpeed: ' . (int) $modSettings['fancybox_playSpeed'] . ($modSettings['fancybox_panel_position'] !== 'simple' ? ',
-				tpl: {
-					error: \'<p class="errorbox">' . $txt['fancy_text_error'] . '</p>\',
-					closeBtn: \'<div title="' . $txt['find_close'] . '" class="fancybox-item fancybox-close"></div>\',
-					next: \'<a title="' . $txt['fancy_button_next'] . '" class="fancybox-item fancybox-next"><span></span></a>\',
-					prev: \'<a title="' . $txt['fancy_button_prev'] . '" class="fancybox-item fancybox-prev"><span></span></a>\'
-				},' : ',') . '
-				helpers: {
-					buttons: {
-						tpl: \'\'+
-						\'<div id="fancybox-buttons"> \' +
-							\'<ul> \' +
-							\'	<li> \' +
-							\'		<a class="btnPrev" title="' . $txt['fancy_button_prev'] . '" href="javascript:;"></a> \' +
-							\'	</li> \' +
-							\'	<li> \' +
-							\'		<a class="btnPlay" title="' . $txt['fancy_slideshow_start'] . '" href="javascript:;"></a> \' +
-							\'	</li> \' +
-							\'	<li> \' +
-							\'		<a class="btnNext" title="' . $txt['fancy_button_next'] . '" href="javascript:;"></a> \' +
-							\'	</li> \' +
-							\'	<li> \' +
-							\'		<a class="btnToggle" title="' . $txt['fancy_toggle_size'] . '" href="javascript:;"></a> \' +
-							\'	</li> \' +
-							\'	<li> \' +
-							\'		<a class="btnClose" title="' . $txt['find_close'] . '" href="javascript:jQuery.fancybox.close();"></a> \' +
-							\'	</li> \' +
-							\'</ul> \' +
-						\'</div>\',
-						position : "' . $modSettings['fancybox_panel_position'] . '"
-					},';
+				animationEffect: "' . $modSettings['fancybox_openEffect'] . '",
+				animationDuration: ' . (int) $modSettings['fancybox_openSpeed'] . ',
+				transitionEffect: "' . $modSettings['fancybox_navEffect'] . '",
+				transitionDuration: ' . (int) $modSettings['fancybox_navSpeed'] . ',
+				slideShow: {
+					autoStart: ' . (!empty($modSettings['fancybox_autoPlay']) ? 'true' : 'false') . ',
+					speed: ' . (int) $modSettings['fancybox_playSpeed'] . ',
+				},
+				lang: "en",
+				i18n: {
+					en: {
+						CLOSE: "' . $txt['find_close'] . '",
+						NEXT: "' . $txt['fancy_button_next'] . '",
+						PREV: "' . $txt['fancy_button_prev'] . '",
+						ERROR: "' . $txt['fancy_text_error'] . '",
+						PLAY_START: "' . $txt['fancy_slideshow_start'] . '",
+						PLAY_STOP: "' . $txt['fancy_slideshow_pause'] . '",
+						FULL_SCREEN: "' . $txt['fancy_full_screen'] . '",
+						THUMBS: "' . $txt['fancy_thumbnails']  . '",
+						DOWNLOAD: "' . $txt['fancy_download']  . '",
+						SHARE: "' . $txt['fancy_share']  . '",
+						ZOOM: "' . $txt['fancybox_effect_zoom'] . '"
+					}
+				},';
 
 	if (!empty($modSettings['fancybox_thumbnails']))
 	{
 		$javascript .= '
-					thumbs: {
-						width: 40,
-						height: 40,
-						position: "bottom"
-					},
-					overlay: {
-						showEarly: true,
-						closeClick : true,
-					},';
+				thumbs: {
+					axis: "x",
+					autoStart: true
+				},';
 	}
 
 	$javascript .= '
-					ajax: {
-						dataType : \'html\',
-						headers  : { \'X-fancyBox\': true, \'User-Agent\': "' . $_SERVER['HTTP_USER_AGENT'] . '"}
-					},
-				}
+				ajax: {
+					dataType : \'html\',
+					headers  : { \'X-fancyBox\': true, \'User-Agent\': "' . $_SERVER['HTTP_USER_AGENT'] . '"}
+				},
 			});
 		});';
 
@@ -235,7 +205,7 @@ function build_lookup()
  */
 function ibc_fb4elk(&$codes)
 {
-	global $modSettings, $user_info;
+	global $modSettings;
 
 	// Only attach for topics, when bbc is on and the option is checked
 	if (empty($_REQUEST['topic']) || empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
@@ -492,32 +462,27 @@ function fb4elk_settings()
 		// Transition effects and speed
 		array('title', 'fancybox_animation'),
 		array('select', 'fancybox_openEffect', array(
-			'elastic' => $txt['fancybox_effect_elastic'],
+			'zoom' => $txt['fancybox_effect_zoom'],
+			'zoom-in-out' => $txt['fancybox_effect_elastic'],
 			'fade' => $txt['fancybox_effect_fade'],
 			'none' => $txt['fancybox_effect_none'])
 		),
 		array('int', 'fancybox_openSpeed'),
-		array('select', 'fancybox_closeEffect', array(
-			'elastic' => $txt['fancybox_effect_elastic'],
-			'fade' => $txt['fancybox_effect_fade'],
-			'none' => $txt['fancybox_effect_none'])
-		),
-		array('int', 'fancybox_closeSpeed'),
+
 		array('select', 'fancybox_navEffect', array(
-			'elastic' => $txt['fancybox_effect_elastic'],
+			'slide' => $txt['fancybox_effect_slide'],
+			'circular' => $txt['fancybox_effect_circular'],
+			'tube' => $txt['fancybox_effect_tube'],
+			'rotate' => $txt['fancybox_effect_rotate'],
+			'zoom-in-out' => $txt['fancybox_effect_elastic'],
 			'fade' => $txt['fancybox_effect_fade'],
 			'none' => $txt['fancybox_effect_none'])
 		),
 		array('int', 'fancybox_navSpeed'),
+
 		array('title', 'fancybox_displayOptions'),
-		array('int', 'fancybox_Padding'),
 		array('check', 'fancybox_Loop'),
 		array('check', 'fancybox_thumbnails', 'onchange' => 'showhidefbOptions();'),
-		array('select', 'fancybox_panel_position', array(
-			'top' => $txt['fancybox_panel_top'],
-			'bottom' => $txt['fancybox_panel_bottom'],
-			'simple' => $txt['fancybox_panel_simple'])
-		),
 		array('title', 'fancybox_other'),
 		array('check', 'fancybox_autoPlay'),
 		array('int', 'fancybox_playSpeed'),
@@ -540,21 +505,15 @@ function fb4elk_settings()
 		{
 			$_POST['fancybox_openSpeed'] = 300;
 		}
-		if (empty($_POST['fancybox_closeSpeed']))
-		{
-			$_POST['fancybox_closeSpeed'] = 300;
-		}
+
 		if (empty($_POST['fancybox_navSpeed']))
 		{
 			$_POST['fancybox_navSpeed'] = 300;
 		}
+
 		if (empty($_POST['fancybox_playSpeed']))
 		{
 			$_POST['fancybox_playSpeed'] = 3000;
-		}
-		if (empty($_POST['fancybox_Padding']))
-		{
-			$_POST['fancybox_Padding'] = 0;
 		}
 
 		Settings_Form::save_db($config_vars);
@@ -629,14 +588,11 @@ class getRemoteLink
 	private function _parseURL()
 	{
 		$this->url_parts = parse_url($this->url[1]);
+		$this->provider = false;
 
 		if ($this->url_parts !== false)
 		{
 			$this->provider = $this->url_parts['host'];
-		}
-		else
-		{
-			$this->provider = false;
 		}
 	}
 
