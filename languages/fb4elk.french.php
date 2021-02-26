@@ -49,4 +49,3 @@ $txt['fancy_button_prev'] = 'Précédent';
 $txt['fancy_slideshow_start'] = 'Démarrer le diaporama';
 $txt['fancy_slideshow_pause'] = 'Mettre le diaporama en pause';
 $txt['fancy_toggle_size'] = 'Basculer la taille';
-?>

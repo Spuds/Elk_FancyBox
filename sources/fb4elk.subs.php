@@ -45,7 +45,7 @@ function ilt_fb4elk()
 	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js', 'fancybox/helpers/jquery.fancybox-buttons.js'), array('stale' => '?v=2.1.6'));
 
 	// Disable the built in lightbox support in ElkArte 1.1
-	if (substr(FORUM_VERSION, 8, 3) === '1.1')
+	if (defined('FORUM_VERSION') && substr(FORUM_VERSION, 8, 3) === '1.1')
 	{
 		addInlineJavascript('$(document).ready(function() {$("[data-lightboximage]").off("click.elk_lb");});');
 	}
