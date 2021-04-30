@@ -538,10 +538,15 @@ function fb4elk_settings()
  */
 class getRemoteLink
 {
+	/** @var string */
 	protected $provider = '';
+	/** @var array */
 	protected $providers = array();
-	protected $out = false;
+	/** @var string|false */
+	protected $out = '';
+	/** @var string */
 	protected $url = '';
+	/** @var array */
 	protected $url_parts = array();
 
 	/**
