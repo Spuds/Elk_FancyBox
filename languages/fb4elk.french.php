@@ -2,7 +2,7 @@
 
 // Settings
 $txt['fancybox_enabled'] = 'Activer le module Fancybox';
-$txt['fancybox_enabled_desc'] = '<strong>Fancybox JS</strong> est distribué sous licence Creative Commons Attribution-Non Commercial 3.0. Vous devez donc demander la permission de l\'auteur et posséder une licence adaptée pour tout utilisation de Fancybox JS sur un site commercial.<br /><br />Activer fancybox signifie que vous acceptez sans réserve la <a href=http://fancyapps.com/fancybox/#license>Licence Fancybox</a>.<br /><br />Pour le support du site postimage, ce module utilise le plugin <a href="http://www.ajax-cross-origin.com/"><strong>Ajax Cross Origin Plugin</strong></a>, fourni sous licence  <a href="href=http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported</a>.';
+$txt['fancybox_enabled_desc'] = '<strong>Fancybox JS</strong> est distribué sous licence Creative Commons Attribution-Non Commercial 3.0. Vous devez donc demander la permission de l\'auteur et posséder une licence adaptée pour tout utilisation de Fancybox JS sur un site commercial.<br /><br />Activer fancybox signifie que vous acceptez sans réserve la <a href=https://fancyapps.com/fancybox/3/#license>Licence Fancybox</a>.<br /><br />Pour le support du site postimage, ce module utilise le plugin <a href="http://www.ajax-cross-origin.com/"><strong>Ajax Cross Origin Plugin</strong></a>, fourni sous licence  <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported</a>.';
 $txt['fancybox_title'] = 'FancyBox';
 $txt['fancybox_settings'] = 'Configuration du module FancyBox';
 $txt['fancybox_desc'] = 'Ce module ajoute un effet lumineux autour des images attachées ou insérées dans les posts.';

@@ -2,7 +2,7 @@
 
 // Settings
 $txt['fancybox_enabled'] = 'Enable the Fancybox Addon';
-$txt['fancybox_enabled_desc'] = '<strong>Fancybox JS</strong> is licensed under a Creative Commons Attribution-Non Commercial 3.0 License. This means you must get the author\'s permission and a commercial license to use Fancybox JS on a commercial website.<br /><br />Enabling fancybox means that you are agreeing to the <a href=https://fancyapps.com/fancybox/3/#license>Fancybox License</a> terms.<br /><br />To support postimage lookups, this addon makes use of <a href="http://www.ajax-cross-origin.com/"><strong>Ajax Cross Origin Plugin</strong></a> Licensed under the <a href="href=http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.';
+$txt['fancybox_enabled_desc'] = '<strong>Fancybox JS</strong> is licensed under a Creative Commons Attribution-Non Commercial 3.0 License. This means you must get the author\'s permission and a commercial license to use Fancybox JS on a commercial website.<br /><br />Enabling fancybox means that you are agreeing to the <a href=https://fancyapps.com/fancybox/3/#license>Fancybox License</a> terms.<br /><br />To support postimage lookups, this addon makes use of <a href="http://www.ajax-cross-origin.com/"><strong>Ajax Cross Origin Plugin</strong></a> Licensed under the <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.';
 $txt['fancybox_title'] = 'FancyBox';
 $txt['fancybox_settings'] = 'FancyBox Settings';
 $txt['fancybox_desc'] = 'This addon adds a lightbox effect to attachment and bbc images.';
