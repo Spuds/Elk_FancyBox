@@ -7,7 +7,7 @@ This ElkArte addon is released under a MPL V1.1 license, a copy of it with its p
 [color=blue][b][size=12pt][u]Introduction[/u][/size][/b][/color]
 This adds a lightbox / zoom effect to thumbnail images and attachments.  It will work on attachments and in-line images.
 [hr]
-Fancybox JS is licensed under a Creative Commons Attribution-Non Commercial 3.0 License. You are free to use fancyBox for your personal or non-profit website projects. You must get the author's permission to use fancyBox for commercial websites by paying a fee.  [url=http://fancyapps.com/fancybox/#license]fancybox[/url]
+Fancybox JS is licensed under a GPLv3 license for all open source applications. A commercial license is required for all commercial applications. [url=https://fancyapps.com/fancybox/#license]fancybox[/url]
 
 [color=blue][b][size=12pt][u]Features[/u][/size][/b][/color]
 o Expands a thumbnail (attachment or in-line image) in to a full-size image in a picture frame when clicked

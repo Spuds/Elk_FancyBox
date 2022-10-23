@@ -3,19 +3,16 @@
 /**
  * @package "FancyBox 4 ElkArte" Addon for Elkarte
  * @author Spuds
- * @copyright (c) 2011-2021 Spuds
+ * @copyright (c) 2011-2022 Spuds
  * @license This Source Code is subject to the terms of the Mozilla Public License
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.7
+ * @version 1.0.8
  *
  */
 
-if (!defined('ELK'))
-{
-	die('No access...');
-}
+use BBC\Codes;
 
 /**
  * ilt_fb4elk()
@@ -27,7 +24,7 @@ function ilt_fb4elk()
 {
 	global $context, $modSettings;
 
-	// If its off, just return
+	// If off, just return
 	if (empty($modSettings['fancybox_enabled']))
 	{
 		return;
@@ -39,12 +36,12 @@ function ilt_fb4elk()
 		return;
 	}
 
-	// Load in the must have items
+	// Load the required items
 	loadLanguage('fb4elk');
 	loadCSSFile(array('fancybox/jquery.fancybox.css'), array('stale' => '?v=3.5.7'));
 	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js'), array('stale' => '?v=3.5.7'));
 
-	// Disable the built in lightbox support in ElkArte 1.1
+	// Disable the built-in lightbox support in ElkArte 1.1
 	if (defined('FORUM_VERSION') && substr(FORUM_VERSION, 8, 3) === '1.1')
 	{
 		addInlineJavascript('$(document).ready(function() {$("[data-lightboximage]").off("click.elk_lb");});');
@@ -60,7 +57,10 @@ function ilt_fb4elk()
 	build_javascript();
 
 	// Build a lookup for postimage
-	if (!empty($modSettings['fancybox_convert_photo_share']) && !empty($modSettings['fancybox_convert_postimage_share']) && !empty($modSettings['fancybox_bbc_img']) && !in_array($context['current_action'], array('profile', 'moderate', 'login')))
+	if (!empty($modSettings['fancybox_convert_photo_share'])
+		&& !empty($modSettings['fancybox_convert_postimage_share'])
+		&& !empty($modSettings['fancybox_bbc_img'])
+		&& !in_array($context['current_action'], array('profile', 'moderate', 'login')))
 	{
 		// CORS lib
 		loadJavascriptFile(array('fancybox/jquery.ajax-cross-origin.min.js'), array('stale' => '?v=1.3'));
@@ -80,7 +80,7 @@ function build_javascript()
 		$(document).ready(function() {
 			// All the attachment links get fancybox data, remove onclick events
 			$("a[id^=link_]").each(function(){
-				var tag = $(this);
+				let tag = $(this);
 
 				tag.attr("data-fancybox", "").removeAttr("onclick");
 
@@ -99,7 +99,8 @@ function build_javascript()
 			// Find all the attachment / bbc divs on the page
 			$("div[id$=_footer]").each(function() {
 				// Fancybox Galleries are created from elements who have the same "rel" tag
-				var id = $(this).attr("id");
+				let id = $(this).attr("id");
+				
 				$("#" + id + " a[rel=gallery]").attr("rel", "gallery_" + id);
 			});
 
@@ -163,8 +164,9 @@ function build_lookup()
 
 	$javascript = '
 	$(\'a[href*="postim"]\').each(function (i, item) {
-		var $item = $(item),
+		let $item = $(item),
 			href = $item.attr("href");
+			
 		$.ajax({
 			type: "GET",
 			crossOrigin: true,
@@ -176,7 +178,7 @@ function build_lookup()
 		}).done(function (response) {
 			// There is an img in the response
 			if (response.indexOf(\'<img\') !== -1) {
-				var image2 = $(response).find("#code_2").html(),
+				let image2 = $(response).find("#code_2").html(),
 					image1 = $(response).find("img:first").attr("src");
 
 				// Swap out the old link with the correct one, link code takes precedence
@@ -197,11 +199,11 @@ function build_lookup()
 /**
  * ibc_fb4elk()
  *
- * - Subs hook, integrate_bbc_codes hook, Called from Subs.php
+ * - Subs hook, integrate_bbc_codes hook, Called from Subs.php bbc_codes_parsing
  * - Used when attaching Fancybox to bbc images
  * - Replaces the standard bbc image link with one containing the fancybox class
  *
- * @param mixed[] $codes array of codes as defined for parse_bbc
+ * @param array $codes array of codes as defined for parse_bbc
  */
 function ibc_fb4elk(&$codes)
 {
@@ -228,17 +230,15 @@ function ibc_fb4elk(&$codes)
 	// Find the img bbc tags and update how they render their HTML
 	foreach ($codes as &$code)
 	{
-		if ($code['tag'] === 'img')
+		if ($code[Codes::ATTR_TAG] === 'img')
 		{
-			$style = '{width}{height}';
-
-			if ($code['content'] == '<img src="$1" alt="" class="bbc_img" />')
+			if ($code[Codes::ATTR_CONTENT] === '<img src="$1" alt="" class="bbc_img" />')
 			{
-				$code['content'] = '<a href="$1" class="fancybox" rel="topic"><img src="$1" alt="" class="bbc_img" /></a>';
+				$code[Codes::ATTR_CONTENT] = '<a href="$1" class="fancybox" rel="topic"><img src="$1" alt="" class="bbc_img" /></a>';
 			}
-			elseif ($code['content'] == '<img src="$1" alt="{alt}" style="{width}{height}" class="bbc_img resized" />')
+			elseif ($code[Codes::ATTR_CONTENT] === '<img src="$1" title="{title}" alt="{alt}" style="{width}{height}" class="bbc_img resized" />')
 			{
-				$code['content'] = '<a href="$1" class="fancybox" rel="topic" title="{alt}"><img src="$1" alt="{alt}" style="' . $style . '" class="bbc_img resized" /></a>';
+				$code[Codes::ATTR_CONTENT] = '<a href="$1" class="fancybox" rel="topic" title="{title}" alt="{alt}"><img src="$1" title="{title}" alt="{alt}" style="{width}{height}" class="bbc_img resized" /></a>';
 			}
 		}
 	}
@@ -250,8 +250,8 @@ function ibc_fb4elk(&$codes)
  * - Display Hook, integrate_prepare_display_context, called from Display.controller
  * - Used to interact with the message array before its sent to the template
  *
- * @param mixed[] $output
- * @param mixed[] $message
+ * @param array $output
+ * @param array $message
  */
 function ipdc_fb4elk(&$output, &$message)
 {
@@ -267,15 +267,19 @@ function ipdc_fb4elk(&$output, &$message)
 
 	// Fix nested links caused by [url=remote][img]http://remote[/img][/url]
 	// These occur as part of parse_bbc so deal with it
+	$output['body'] = str_replace('<br />', "\n", $output['body']);
 	$check = preg_replace_callback($regex, 'fix_url_bbc', $output['body']);
 	if ($check !== null)
 	{
 		$output['body'] = $check;
 	}
+	$output['body'] = str_replace( "\n", '<br />', $output['body']);
+
 
 	// Find all the bbc images with a rel="topic" in the links and inject the gallery tag so
 	// the bbc images and attachments of a message are part of the same gallery
-	$output['body'] = str_replace('rel="topic"', 'data-fancybox="1" rel="gallery_msg_' . $output['id'] . '_footer"', $output['body']);
+	$rel = 'gallery_' . $output['id'];
+	$output['body'] = str_replace('rel="topic"', 'data-lightboxmessage="' . $output['id'] . '" data-fancybox="' . $rel . '" rel="' . $rel . '"', $output['body']);
 }
 
 /**
@@ -306,20 +310,19 @@ function fix_url_bbc($matches)
 	if (!empty($modSettings['fancybox_disable_img_in_url']) || $no_fb)
 	{
 		// Remove the inside link and trailing </a>
-		$output = str_replace($matches[3], '', $output);
-		$output = str_replace($matches[6], $matches[7], $output);
+		$output = str_replace(array($matches[3], $matches[6]),
+			array('', $matches[7]),
+			$output);
 	}
-	// Fix the links so they link to what they did (ie the url)
+	// Fix the links, so they link to what they did (ie the url)
 	else
 	{
 		// Remove the inside link
-		$output = str_replace($matches[3], '', $output);
-
 		// Swap outside link class with the inside one (fancybox)
-		$output = str_replace($matches[2], $matches[5], $output);
-
 		// Replace the double </a></a> with a single
-		$output = str_replace($matches[6], $matches[7], $output);
+		$output = str_replace(array($matches[3], $matches[2], $matches[6]),
+			array('', $matches[5], $matches[7]),
+			$output);
 
 		// Support remote image sites?
 		if (!empty($modSettings['fancybox_convert_photo_share']))
@@ -346,7 +349,7 @@ function fix_url_bbc($matches)
  * - Admin Hook, integrate_admin_areas, called from Admin.php
  * - Used to add/modify admin menu areas
  *
- * @param mixed[] $admin_areas
+ * @param array $admin_areas
  */
 function iaa_fb4elk(&$admin_areas)
 {
@@ -362,7 +365,7 @@ function iaa_fb4elk(&$admin_areas)
  * - Admin Hook, integrate_sa_modify_modifications, called from AddonSettings.controller.php
  * - Used to add subactions to the addon area
  *
- * @param mixed[] $sub_actions
+ * @param array $sub_actions
  */
 function imm_fb4elk(&$sub_actions)
 {
@@ -390,24 +393,21 @@ function fb4elk_settings()
 	loadLanguage('fb4elk');
 
 	// Lets build a settings form
-	require_once(SUBSDIR . '/SettingsForm.class.php');
-
-	// Instantiate the form
-	$fbSettings = new Settings_Form();
+	$fbSettings = new Settings_Form(Settings_Form::DB_ADAPTER);
 
 	// Show / hide fancybox fields as required
 	addInlineJavascript('
 		function showhidefbOptions()
 		{
-			var fbThumb = document.getElementById(\'fancybox_thumbnails\').checked,
+			let fbThumb = document.getElementById(\'fancybox_thumbnails\').checked,
 				fbThumb_dd = $(\'#fancybox_panel_position\'),
 				fbThumb_dt = $(\'#setting_fancybox_panel_position\');
 
-			var fbConvert = document.getElementById(\'fancybox_disable_img_in_url\'),
+			let fbConvert = document.getElementById(\'fancybox_disable_img_in_url\'),
 				fbShare = document.getElementById(\'fancybox_convert_photo_share\'),
 				fbBBC = document.getElementById(\'fancybox_bbc_img\');
 				
-			var postimage_hide = !document.getElementById(\'fancybox_convert_photo_share\').checked,
+			let postimage_hide = !document.getElementById(\'fancybox_convert_photo_share\').checked,
 			 	postimage_dd = $(\'#fancybox_convert_postimage_share\'),
 				postimage_dt = $(\'#setting_fancybox_convert_postimage_share\');	
 
@@ -493,7 +493,7 @@ function fb4elk_settings()
 	);
 
 	// Load the settings to the form class
-	$fbSettings->settings($config_vars);
+	$fbSettings->setConfigVars($config_vars);
 
 	// Saving?
 	if (isset($_GET['save']))
@@ -516,7 +516,10 @@ function fb4elk_settings()
 			$_POST['fancybox_playSpeed'] = 3000;
 		}
 
-		Settings_Form::save_db($config_vars);
+		$fbSettings->setConfigVars($config_vars);
+		$fbSettings->setConfigValues($_POST);
+		$fbSettings->save();
+
 		redirectexit('action=admin;area=addonsettings;sa=fancybox');
 	}
 
@@ -530,7 +533,7 @@ function fb4elk_settings()
 		updateSettings(array('fancybox_panel_position' => 'top'));
 	}
 
-	Settings_Form::prepare_db($config_vars);
+	$fbSettings->prepare();
 }
 
 /**
@@ -563,13 +566,13 @@ class getRemoteLink
 		// Sites we support
 		$this->_active_providers();
 
-		// Parse out a image host name for use
+		// Parse an image host name for use
 		$this->_parseURL();
 
 		// A host we support and is active
 		if ($this->provider && $this->_valid())
 		{
-			// The the host function
+			// The host function
 			$call = '_' . $this->provider;
 			$this->$call();
 		}
@@ -588,7 +591,7 @@ class getRemoteLink
 	}
 
 	/**
-	 * Parses a URL in to a its parts so we have the host provider
+	 * Parses a URL into its parts, so we have the host provider
 	 */
 	private function _parseURL()
 	{
@@ -623,7 +626,7 @@ class getRemoteLink
 	}
 
 	/**
-	 * Imageshack changed how they works and I'm not sure this is the way to go for all links
+	 * Imageshack changed how they work, and I'm not sure this is the way to go for all links
 	 * but the old .th thing looks to be gone.
 	 *
 	 * thumbnail may look like http://imagizer.imageshack.us/v2/150x100q90/713/coreg.jpg
@@ -682,14 +685,16 @@ class getRemoteLink
 	{
 		if (preg_match('~(.*?)\.(?:m\.|)(png|gif|jp(e)?g|bmp)$~isu', $this->url[4], $out))
 		{
-			if (substr($out[1], -1) == 'm')
+			if (substr($out[1], -1) === 'm')
 			{
-				$out[1] = substr($out[1], 0, strlen($out[1]) - 1);
+				$out[1] = substr($out[1], 0, -1);
 			}
-			if (substr($out[1], -3) == 'med')
+
+			if (substr($out[1], -3) === 'med')
 			{
-				$out[1] = substr($out[1], 0, strlen($out[1]) - 3);
+				$out[1] = substr($out[1], 0, -3);
 			}
+
 			$this->out = $out[1] . '.' . $out[2];
 		}
 	}
@@ -714,13 +719,20 @@ class getRemoteLink
 	}
 
 	/**
-	 * flic.kr can have a variety of smalls, here we look for _t _s or _q and swap it with _b
+	 * flic.kr has a variety of smalls, here we look for _t _s or _q and swap it with _b
 	 */
 	private function _flic()
 	{
-		if (preg_match('~(.*?)(?:_[t|s|q]\.)(png|gif|jp(e)?g|bmp)$~isu', $this->url[4], $out))
+		if (preg_match('~(.*?)(_[t|s|q|k]\.)(png|gif|jp(e)?g|bmp)$~isu', $this->url[4], $out))
 		{
-			$this->out = $out[1] . '_b.' . $out[2];
+			if ($out[2] === '_k.')
+			{
+				$this->out = $this->url[4];
+			}
+			else
+			{
+				$this->out = $out[1] . '_b.' . $out[3];
+			}
 		}
 	}
 

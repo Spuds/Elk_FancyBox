@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE package-info SYSTEM "http://www.elkarte.net/site/package-info">
-<package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
+<!DOCTYPE package-info SYSTEM "https://www.elkarte.net/site/package-info">
+<package-info xmlns="https://www.elkarte.net/site/package-info" xmlns:elk="https://www.elkarte.net/">
 	<id>Spuds:fb4elk</id>
 	<name>Fancy Box 4 ElkArte</name>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<type>addon</type>
 	<license><![CDATA[
 /**
@@ -12,10 +12,10 @@
  * @author spuds
  * @license MPL 1.1 http://mozilla.org/MPL/1.1/
  *
- * @version 1.0.7
+ * @version 1.0.8
  */
 ]]></license>
-	<install for="1.0 - 1.1.99">
+	<install for="1.1 - 1.1.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<license type="inline">This ElkArte addon is released under a MPL V1.1 license, a copy of it with its provisions is included with the package.</license>
 		<require-file name="languages/fb4elk.english.php" destination="LANGUAGEDIR/english">The language strings</require-file>
@@ -25,7 +25,7 @@
 		<require-dir name="scripts" destination="THEMEDIR">The Fancybox JS to create the lightbox</require-dir>>
 		<require-dir name="css" destination="THEMEDIR">The Fancybox CSS</require-dir>
 		<hook hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
-		<hook hook="integrate_bbc_codes" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
+		<hook hook="bbc_codes_parsing" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
 		<hook hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
 		<hook hook="integrate_sa_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
 		<hook hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />
@@ -33,9 +33,9 @@
 		<redirect url="?action=admin;area=addonsettings;sa=fancybox" timeout="5000" />
 	</install>
 
-	<uninstall for="1.0 - 1.1.99">
+	<uninstall for="1.1 - 1.1.99">
 		<hook reverse="true" hook="integrate_load_theme" file="SUBSDIR/fb4elk.subs.php" function="ilt_fb4elk" />
-		<hook reverse="true" hook="integrate_bbc_codes" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
+		<hook reverse="true" hook="bbc_codes_parsing" file="SUBSDIR/fb4elk.subs.php" function="ibc_fb4elk" />
 		<hook reverse="true" hook="integrate_admin_areas" file="SUBSDIR/fb4elk.subs.php" function="iaa_fb4elk" />
 		<hook reverse="true" hook="integrate_sa_modify_modifications" file="SUBSDIR/fb4elk.subs.php" function="imm_fb4elk" />
 		<hook reverse="true" hook="integrate_prepare_display_context" file="SUBSDIR/fb4elk.subs.php" function="ipdc_fb4elk" />

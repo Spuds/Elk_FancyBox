@@ -1,8 +1,8 @@
 ### Fancybox 4 ElkArte Version 1.0.7
 
 **License**
-* This Source Code is subject to the terms of the Mozilla Public License version 1.1 (the "License"). You can obtain a copy of the License at [http://mozilla.org/MPL/1.1/.](http://mozilla.org/MPL/1.1/)
-* fancybox JS is licensed under a Creative Commons Attribution-Non Commercial 3.0 License. You are free to use fancyBox for your personal or non-profit website projects. You must get the author's permission to use fancyBox for commercial websites by paying a fee. [fancybox license](http://fancyapps.com/fancybox/#license)
+* This Source Code is subject to the terms of the Mozilla Public License version 1.1 (the "License"). You can obtain a copy of the License at [https://mozilla.org/MPL/1.1/.](https://mozilla.org/MPL/1.1/)
+* Fancybox JS is licensed under a GPLv3 license for all open source applications. A commercial license is required for all commercial applications [fancybox license](https://fancyapps.com/fancybox/#license)terms..';
 
 **Introduction**
 This ElkArte addon adds an image lightbox / zoom effect to thumbnail images and attachments.
