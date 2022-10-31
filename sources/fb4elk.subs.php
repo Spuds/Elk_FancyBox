@@ -199,7 +199,7 @@ function build_lookup()
 /**
  * ibc_fb4elk()
  *
- * - Subs hook, integrate_bbc_codes hook, Called from Subs.php bbc_codes_parsing
+ * - integrate_bbc_codes hook, Called from Codes.php bbc_codes_parsing
  * - Used when attaching Fancybox to bbc images
  * - Replaces the standard bbc image link with one containing the fancybox class
  *
