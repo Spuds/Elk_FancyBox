@@ -95,7 +95,7 @@ function build_javascript()
 
 				// No rel tag yet? then add one
 				if (!tag.attr("rel")) {
-					if (tag.data("lightboxmessage"))
+					if (tag.data("lightboxmessage") && tag.data("lightboxmessage") !==0)
 					{
 						tag.attr("rel", "gallery_" + tag.data("lightboxmessage"));
 						tag.attr("data-fancybox", "gallery_" + tag.data("lightboxmessage"));
@@ -106,11 +106,17 @@ function build_javascript()
 			});
 
 			// Find all the attachment / bbc divs on the page
-			$("div[id$=_footer]").each(function() {
+			$("footer[id$=_footer]").each(function() {
 				// Fancybox Galleries are created from elements who have the same "rel" tag
 				let id = $(this).attr("id");
 				
 				$("#" + id + " a[rel=gallery]").attr("rel", "gallery_" + id);
+			});
+			
+			// Find all the gallery images used in signatures
+			$("div.signature figure.item_image > a").each(function() {
+				$(this).attr("rel", "gallery");
+				$(this).attr("data-fancybox", "gallery");
 			});
 
 			// Attach FB to everything we tagged with the fancybox data attr
