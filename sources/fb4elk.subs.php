@@ -8,7 +8,7 @@
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.8
+ * @version 1.0.9
  *
  */
 
@@ -40,17 +40,26 @@ function ilt_fb4elk()
 	loadLanguage('fb4elk');
 	loadCSSFile(array('fancybox/jquery.fancybox.css'), array('stale' => '?v=3.5.7'));
 	loadJavascriptFile(array('fancybox/jquery.fancybox.min.js'), array('stale' => '?v=3.5.7'));
+	loadJavascriptFile(array('fancybox/jquery.fb4elk.js'), array('stale' => '?v=1.0.9'));
 
 	// Disable the built-in lightbox support in ElkArte 1.1
 	if (defined('FORUM_VERSION') && substr(FORUM_VERSION, 8, 3) === '1.1')
 	{
-		addInlineJavascript('$(document).ready(function() {$("[data-lightboximage]").off("click.elk_lb");});');
+		addInlineJavascript('
+			fbWaitForEvent("[data-lightboximage]", "click.elk_lb", 200, 5)
+			.then(() => {$("[data-lightboximage]").off("click.elk_lb")})
+			.catch((error) => {console.info("fb4elk: ", error)});
+		', true);
 	}
 
-	// BBC image links enabled, then remove the elk bbc image clicker
+	// BBC image links enabled, then remove the elk bbc image clicker (really a 1.0 thang)
 	if (!empty($modSettings['fancybox_bbc_img']))
 	{
-		addInlineJavascript('$(document).ready(function() {$("img").off("click.elk_bbc");});');
+		addInlineJavascript('
+			fbWaitForEvent("img", "click.elk_bbc", 200, 5)
+			.then(() => {$("img").off("click.elk_bbc")})
+			.catch((error) => {console.info("fb4elk: ", error)});
+		', true);
 	}
 
 	// And output the needed JS commands
