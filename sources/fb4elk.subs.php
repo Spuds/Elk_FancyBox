@@ -31,7 +31,7 @@ function ilt_fb4elk()
 	}
 
 	// If we are in an area where we never want this, return
-	if (in_array($context['current_action'], array('admin', 'helpadmin', 'printpage')))
+	if (in_array($context['current_action'], array('admin', 'helpadmin', 'printpage', 'mentions', 'post')))
 	{
 		return;
 	}
@@ -48,7 +48,7 @@ function ilt_fb4elk()
 		addInlineJavascript('
 			fbWaitForEvent("[data-lightboximage]", "click.elk_lb", 200, 5)
 			.then(() => {$("[data-lightboximage]").off("click.elk_lb")})
-			.catch((error) => {console.info("fb4elk: ", error)});
+			.catch((error) => {if ("console" in window) console.info("fb4elk: ", error)});
 		', true);
 	}
 
@@ -58,7 +58,7 @@ function ilt_fb4elk()
 		addInlineJavascript('
 			fbWaitForEvent("img", "click.elk_bbc", 200, 5)
 			.then(() => {$("img").off("click.elk_bbc")})
-			.catch((error) => {console.info("fb4elk: ", error)});
+			.catch((error) => {if ("console" in window) console.info("fb4elk: ", error)});
 		', true);
 	}
 
@@ -113,10 +113,10 @@ function build_javascript()
 				$("#" + id + " a[rel=gallery]").attr("rel", "gallery_" + id);
 			});
 			
-			// Find all the gallery images used in signatures
+			// Find all the gallery images used in signatures, remove from message slideshow
 			$("div.signature figure.item_image > a").each(function() {
-				$(this).attr("rel", "gallery");
-				$(this).attr("data-fancybox", "gallery");
+				$(this).attr("rel", "mgallery");
+				$(this).attr("data-fancybox", "mgallery");
 			});
 
 			// Attach FB to everything we tagged with the fancybox data attr
