@@ -114,9 +114,11 @@ function build_javascript()
 			});
 			
 			// Find all the gallery images used in signatures, remove from message slideshow
+			let count=0;
 			$("div.signature figure.item_image > a").each(function() {
-				$(this).attr("rel", "mgallery");
-				$(this).attr("data-fancybox", "mgallery");
+				$(this).attr("rel", "mgallery_" + count);
+				$(this).attr("data-fancybox", "mgallery_" + count);
+				count++;
 			});
 
 			// Attach FB to everything we tagged with the fancybox data attr
