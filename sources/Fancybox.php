@@ -3,7 +3,7 @@
 /**
  * @package "FancyBox 4 ElkArte" Addon for Elkarte
  * @author Spuds
- * @copyright (c) 2011-2025 Spuds
+ * @copyright (c) 2011-2026 Spuds
  * @license This Source Code is subject to the terms of the Mozilla Public License
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
@@ -254,13 +254,11 @@ function ipdc_fb4elk(&$output)
 
 	// Fix nested links caused by [url=remote][img]http://remote[/img][/url]
 	// These occur as part of parse_bbc so deal with it
-	$output['body'] = str_replace('<br />', "\n", $output['body']);
 	$check = preg_replace_callback($regex, 'fix_url_bbc', $output['body']);
 	if ($check !== null)
 	{
 		$output['body'] = $check;
 	}
-	$output['body'] = str_replace( "\n", '<br />', $output['body']);
 
 	// Find all the bbc images with a rel="topic" in the links and inject the gallery tag so
 	// the bbc images and attachments of a message are part of the same gallery
@@ -290,7 +288,7 @@ function fix_url_bbc($matches)
 	static $linker;
 
 	$output = $matches[0];
-	$no_fb = strpos($matches[5], 'title="nofb"') !== false || strpos($matches[5], 'title="&quot;nofb&quot;"') !== false;
+	$no_fb = str_contains($matches[5], 'title="nofb"') || str_contains($matches[5], 'title="&quot;nofb&quot;"');
 
 	// Don't want fancybox at all on linked bbc image [url=remote][img]http://remote[/img][/url] syntax
 	if (!empty($modSettings['fancybox_disable_img_in_url']) || $no_fb)
@@ -329,7 +327,7 @@ function iaa_fb4elk($admin_areas)
 
 	$new_subsection = [$txt['fancybox_title']];
 
-	$admin_areas->insertSubsection('config', 'addonsettings', 'fancybox', $new_subsection);
+	$admin_areas->insertSubsection('addons', 'addonsettings', 'fancybox', $new_subsection);
 }
 
 /**
@@ -367,7 +365,7 @@ function fb4elk_settings()
 
 	Txt::load('Fancybox');
 
-	// Lets build a settings form
+	// Let's build a settings form
 	$settingsForm = new SettingsForm(SettingsForm::DB_ADAPTER);
 
 	// Show / hide fancybox fields as required
