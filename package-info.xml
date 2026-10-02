@@ -26,10 +26,8 @@
 		<require-file name="sources/Fancybox.php" destination="ADDONSDIR">Main processing file</require-file>
 
 		<hook hook="integrate_load_theme" file="ADDONSDIR/Fancybox.php" function="ilt_fb4elk" />
-		<hook hook="bbc_codes_parsing" file="ADDONSDIR/Fancybox.php" function="ibc_fb4elk" />
 		<hook hook="integrate_admin_areas" file="ADDONSDIR/Fancybox.php" function="iaa_fb4elk" />
 		<hook hook="integrate_sa_modify_modifications" file="ADDONSDIR/Fancybox.php" function="imm_fb4elk" />
-		<hook hook="integrate_prepare_display_context" file="ADDONSDIR/Fancybox.php" function="ipdc_fb4elk" />
 
 		<credits url="www.elkarte.net" license="MPL 1.1" copyright="spuds">Fancybox 4 Elkarte</credits>
 
@@ -38,10 +36,8 @@
 
 	<uninstall for="2.0.0 Beta 1 - 2.0.99">
 		<hook reverse="true" hook="integrate_load_theme" file="ADDONSDIR/Fancybox.php" function="ilt_fb4elk" />
-		<hook reverse="true" hook="bbc_codes_parsing" file="ADDONSDIR/Fancybox.php" function="ibc_fb4elk" />
 		<hook reverse="true" hook="integrate_admin_areas" file="ADDONSDIR/Fancybox.php" function="iaa_fb4elk" />
 		<hook reverse="true" hook="integrate_sa_modify_modifications" file="ADDONSDIR/Fancybox.php" function="imm_fb4elk" />
-		<hook reverse="true" hook="integrate_prepare_display_context" file="ADDONSDIR/Fancybox.php" function="ipdc_fb4elk" />
 
         <remove-file name="ADDONSDIR/Fancybox.php" />
 

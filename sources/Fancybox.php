@@ -12,7 +12,6 @@
  *
  */
 
-use BBC\Codes;
 use ElkArte\Languages\Txt;
 use ElkArte\SettingsForm\SettingsForm;
 
@@ -39,7 +38,9 @@ function ilt_fb4elk()
 
 	// If we are in an area where we never want this, return
 	if (!isset($context['current_action'])
-		|| in_array($context['current_action'], ['admin', 'jslocale', 'helpadmin', 'printpage', 'mentions', 'post']))
+		|| in_array(strtolower($context['current_action']), ['admin', 'jslocale', 'helpadmin', 'printpage', 'mentions', 'post',
+			'search', 'calendar', 'memberlist', 'help', 'who', 'stats', 'login', 'reminder', 'register', 'contact',
+			'moderate', 'xmlhttp', 'xmlpreview', 'quotefast', 'jsmodify', 'pm']))
 	{
 		return;
 	}
@@ -48,29 +49,8 @@ function ilt_fb4elk()
 	Txt::load('Fancybox');
 	loadCSSFile(['fancybox/jquery.fancybox.css'], ['stale' => '?v=3.5.7']);
 	loadJavascriptFile(['fancybox/jquery.fancybox.min.js'], ['stale' => '?v=3.5.7']);
-	loadJavascriptFile(['fancybox/jquery.fb4elk.js'], ['stale' => '?v=2.0.0']);
 
-	// Disable ElkArte lightbox and BBC expand support
-	$javascript = '
-	document.addEventListener("DOMContentLoaded", function() {
-		fbWaitForEvent("[data-lightboximage]", "click.elk_lb", 100, 50)
-		.then(() => {$("[data-lightboximage]").off("click.elk_lb")})
-		.catch((error) => {if ("console" in window) console.info("fb4elk: ", error)});
-	';
-
-	// Disable ElkArte BBC image links expander
-	if (!empty($modSettings['fancybox_bbc_img']))
-	{
-		$javascript .= '
-		fbWaitForEvent("[data-bbcexpandimage]", "click.elk_bbc", 100, 50)
-		.then(() => {$("[data-bbcexpandimage]").off("click.elk_bbc")})
-		.catch((error) => {if ("console" in window) console.info("fb4elk: ", error)});
-		';
-	}
-
-	theme()->addInlineJavascript($javascript . '});', true);
-
-	// And output the needed JS commands
+	// Output the necessary JS commands to initialize Fancybox and disable core lightbox/expander
 	build_javascript();
 }
 
@@ -81,35 +61,109 @@ function build_javascript()
 {
 	global $modSettings, $txt;
 
+	$disable_img_in_url = !empty($modSettings['fancybox_disable_img_in_url']) ? 'true' : 'false';
+
 	// Build the JavaScript based on ACP choices
 	$javascript = '
 		document.addEventListener("DOMContentLoaded", function() {
-			// All the attachment links get fancybox data, remove onclick events
-			$("a[id^=link_]").each(function(){
+			// All the attachment links get fancybox data, remove onclick events and prevent core lightbox
+			$("a[id^=link_], a[data-lightboximage]").each(function(){
 				let tag = $(this);
 
 				tag.attr("data-fancybox", "").removeAttr("onclick");
 
 				// No rel tag yet? then add one
 				if (!tag.attr("rel")) {
-					if (tag.data("lightboxmessage") && tag.data("lightboxmessage") !==0)
+					if (tag.data("lightboxmessage") && tag.data("lightboxmessage") !== 0)
 					{
 						tag.attr("rel", "gallery_" + tag.data("lightboxmessage"));
 						tag.attr("data-fancybox", "gallery_" + tag.data("lightboxmessage"));
 					}
 					else
+					{
 						tag.attr("rel", "gallery");
+						tag.attr("data-fancybox", "gallery");
+					}
 				}
+
+				// Remove data-lightboximage so deferred theme.js $(function) will not bind click.elk_lb
+				tag.removeAttr("data-lightboximage").off("click.elk_lb");
 			});
 
+			// Disable ElkArte core lightbox by removing data-lightboximage attribute from any remaining elements
+			$("[data-lightboximage]").removeAttr("data-lightboximage").off("click.elk_lb");
+
 			// Find any gallery images used in signatures, remove from message slideshow
-			let count=0;
+			let count = 0;
 			$("div.signature figure.item_image > a").each(function() {
 				$(this).attr("rel", "mgallery_" + count);
 				$(this).attr("data-fancybox", "mgallery_" + count);
 				count++;
-			});
+			});';
 
+	if (!empty($modSettings['fancybox_bbc_img']))
+	{
+		$javascript .= '
+			
+			// Disable ElkArte core BBC inline expander by removing data-bbcexpandimage attribute
+			$("[data-bbcexpandimage]").removeAttr("data-bbcexpandimage").off("click.elk_bbc");
+
+			// Process BBC images unobtrusively on the client side
+			$("img.bbc_img").each(function() {
+				let $img = $(this),
+					title = $img.attr("title") || "",
+					alt = $img.attr("alt") || "",
+					isNoFb = title === "nofb" || title.indexOf("nofb") !== -1 || alt === "nofb" || $img.attr("data-nofb"),
+					$parentA = $img.closest("a");
+
+				// Skip if inside an attachment link, gallery item link, or marked with nofb
+				if ($parentA.is("[data-lightboximage], [id^=link_], [data-fancybox^=mgallery_]") || isNoFb) {
+					return;
+				}
+
+				// Determine gallery name based on enclosing message/post
+				let galleryName = "gallery";
+				let $msg = $img.closest("[data-msgid], section[id^=msg_], div[id^=msg_]");
+				if ($msg.length) {
+					let msgId = $msg.data("msgid") || ($msg.attr("id") || "").replace(/^msg_/, "");
+					if (msgId && msgId !== "0") {
+						galleryName = "gallery_" + msgId;
+					}
+				}
+
+				if ($img.closest(".signature, [id$=_signature]").length) {
+					galleryName = "gallery_sig_" + count;
+					count++;
+				}
+
+				if ($parentA.length) {
+					// Image is inside a link [url=...][img]...[/img][/url]
+					if (!' . $disable_img_in_url . ') {
+						$parentA.attr("data-fancybox", galleryName);
+						if (!$parentA.attr("rel")) {
+							$parentA.attr("rel", galleryName);
+						}
+					}
+				} else {
+					// Standalone image: wrap in anchor for Fancybox
+					let caption = title || alt;
+					let $wrap = $("<a></a>")
+						.attr("href", $img.attr("src"))
+						.attr("data-fancybox", galleryName)
+						.attr("rel", galleryName)
+						.addClass("fancybox");
+
+					if (caption) {
+						$wrap.attr("data-caption", caption);
+					}
+
+					$img.wrap($wrap);
+				}
+			});';
+	}
+
+	$javascript .= '
+			
 			// Attach FB to everything we tagged with the fancybox data attr
 			$("[data-fancybox]").fancybox({
 				type: "image",
@@ -140,10 +194,6 @@ function build_javascript()
 						SHARE: "' . $txt['fancy_share']  . '",
 						ZOOM: "' . $txt['fancybox_effect_zoom'] . '"
 					}
-				},
-				ajax: {
-					dataType : "html",
-					headers  : { "X-fancyBox": true, "User-Agent": "' . $_SERVER['HTTP_USER_AGENT'] . '"}
 				},';
 
 	if (!empty($modSettings['fancybox_thumbnails']))
@@ -173,143 +223,14 @@ function build_javascript()
 
 	$javascript .= '
 			});
+		});
+
+		$(function() {
+			$("[data-lightboximage], a[id^=link_], [data-fancybox]").removeAttr("data-lightboximage").off("click.elk_lb");
+			' . (!empty($modSettings['fancybox_bbc_img']) ? '$("[data-bbcexpandimage], img.bbc_img").removeAttr("data-bbcexpandimage").off("click.elk_bbc");' : '') . '
 		});';
 
 	theme()->addInlineJavascript($javascript, true);
-}
-
-/**
- * ibc_fb4elk()
- *
- * - BBC Processing Hook, integrate_bbc_codes, modifies the behavior of BBC image tags
- * - Enhances image BBC tags to be wrapped in a FancyBox link for improved user experience.
- * - integrate_bbc_codes hook, Called from Codes.php bbc_codes_parsing
- *
- * @param array $codes Array of BBC codes used for parsing
- * @return void
- */
-function ibc_fb4elk(&$codes)
-{
-	global $modSettings;
-
-	if (empty($modSettings['fancybox_enabled']))
-	{
-		return;
-	}
-
-	// Only attach for topics when bbc is on and the option is checked
-	if (empty($_REQUEST['topic']) || empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
-	{
-		return;
-	}
-
-	// Make sure the admin had not disabled img tags as well
-	if (!empty($modSettings['disabledBBC']))
-	{
-		if (in_array('img', explode(',', $modSettings['disabledBBC']), true))
-		{
-			return;
-		}
-	}
-
-	// Find the img bbc tags and update how they render their HTML
-	foreach ($codes as &$code)
-	{
-		if ($code[Codes::ATTR_TAG] === 'img')
-		{
-			if ($code[Codes::ATTR_CONTENT] === '<img src="$1" alt="" class="bbc_img" />')
-			{
-				$code[Codes::ATTR_CONTENT] = '<a href="$1" class="fancybox" rel="topic"><img src="$1" alt="" class="bbc_img" /></a>';
-			}
-			elseif ($code[Codes::ATTR_CONTENT] === '<img src="$1" title="{title}" alt="{alt}" style="{width}{height}" class="bbc_img resized" data-bbcexpandimage="1" />')
-			{
-				$code[Codes::ATTR_CONTENT] = '<a href="$1" class="fancybox" rel="topic" title="{title}" alt="{alt}"><img src="$1" title="{title}" alt="{alt}" style="{width}{height}" class="bbc_img resized" /></a>';
-			}
-		}
-	}
-}
-
-/**
- * ipdc_fb4elk()
- *
- * - Hook to process and enhance BBC images and links in the output content.
- * - Fixes nested links caused by [url][img][/img][/url] constructs.
- * - Enhances BBC images with attributes for integration with FancyBox gallery functionality.
- * - Display Hook, integrate_prepare_display_context, called from Renderer.php via DisplayRenderer.php
- *
- * @param array $output The associative array containing output content, including the 'body' and 'id' keys.
- * @return void
- */
-function ipdc_fb4elk(&$output)
-{
-	global $modSettings;
-
-	$regex = '~<a href="([^"]*)".*(class="bbc_link").*>(<a href="([^"]*)".*(class="fancybox" rel="topic"(?: title=".*")?)>)<img.*class="bbc_img(?: resized)?" />(</a>(</a>))~Ui';
-
-	// Make sure we need to do anything
-	if (empty($modSettings['enableBBC']) || empty($modSettings['fancybox_bbc_img']))
-	{
-		return;
-	}
-
-	// Fix nested links caused by [url=remote][img]http://remote[/img][/url]
-	// These occur as part of parse_bbc so deal with it
-	$check = preg_replace_callback($regex, 'fix_url_bbc', $output['body']);
-	if ($check !== null)
-	{
-		$output['body'] = $check;
-	}
-
-	// Find all the bbc images with a rel="topic" in the links and inject the gallery tag so
-	// the bbc images and attachments of a message are part of the same gallery
-	$rel = 'gallery_' . $output['id'];
-	$output['body'] = str_replace('rel="topic"', 'data-lightboxmessage="' . $output['id'] . '" data-fancybox="' . $rel . '" rel="' . $rel . '"', $output['body']);
-}
-
-/**
- * Updates links to external sites to link to full image or reverts the nested link to
- * be what it was since we add a link via the updated img BBC tag.
- *
- * @param string[] $matches from the regex with the following capture groups
- *    [0] Full match
- *    [1] Outside link href
- *    [2] Outside link class=""
- *    [3] Inside link full
- *    [4] Inside link href
- *    [5] Inside link class="fancybox" rel="topic"
- *    [6] Trailing </a></a>
- *    [7] Trailing </a>
- *
- * @return string
- */
-function fix_url_bbc($matches)
-{
-	global $modSettings;
-	static $linker;
-
-	$output = $matches[0];
-	$no_fb = str_contains($matches[5], 'title="nofb"') || str_contains($matches[5], 'title="&quot;nofb&quot;"');
-
-	// Don't want fancybox at all on linked bbc image [url=remote][img]http://remote[/img][/url] syntax
-	if (!empty($modSettings['fancybox_disable_img_in_url']) || $no_fb)
-	{
-		// Remove the inside link and trailing </a>
-		$output = str_replace([$matches[3], $matches[6]],
-			['', $matches[7]],
-			$output);
-	}
-	// Fix the links, so they link to what they did (ie the url)
-	else
-	{
-		// Remove the inside link
-		// Swap outside link class with the inside one (fancybox)
-		// Replace the double </a></a> with a single
-		$output = str_replace([$matches[3], $matches[2], $matches[6]],
-			['', $matches[5], $matches[7]],
-			$output);
-	}
-
-	return $output;
 }
 
 /**
