@@ -7,7 +7,7 @@ $txt['fancybox_title'] = 'FancyBox';
 $txt['fancybox_settings'] = 'FancyBox Settings';
 $txt['fancybox_desc'] = 'This addon adds a lightbox effect to attachment and bbc images.';
 
-// Effects for events
+// Effects of events
 $txt['fancybox_animation'] = 'Animation Effects';
 $txt['fancybox_effect_elastic'] = 'Zoom-in-out';
 $txt['fancybox_effect_fade'] = 'Fade';
@@ -25,7 +25,7 @@ $txt['fancybox_openSpeed'] = 'Animation speed when opening/closing';
 $txt['fancybox_navSpeed'] = 'Animation speed when moving to next image';
 
 // Positioning options
-$txt['fancybox_thumbnails'] = 'Display Navigation Thumbnails';
+$txt['fancybox_thumbnail_position'] = 'Display Navigation Thumbnails';
 $txt['fancybox_thumbnails_side'] = 'Side';
 $txt['fancybox_thumbnails_bottom'] = 'Bottom';
 
