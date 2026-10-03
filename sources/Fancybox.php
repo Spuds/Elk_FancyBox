@@ -40,7 +40,7 @@ function ilt_fb4elk()
 	if (!isset($context['current_action'])
 		|| in_array(strtolower($context['current_action']), ['admin', 'jslocale', 'helpadmin', 'printpage', 'mentions', 'post',
 			'search', 'calendar', 'memberlist', 'help', 'who', 'stats', 'login', 'reminder', 'register', 'contact',
-			'moderate', 'xmlhttp', 'xmlpreview', 'quotefast', 'jsmodify', 'pm']))
+			'moderate', 'xmlhttp', 'xmlpreview', 'quotefast', 'jsmodify', 'pm', 'forum']))
 	{
 		return;
 	}
